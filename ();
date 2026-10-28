@@ -1,0 +1,7 @@
+#include "pmain.h"
+
+#include "sintab.h"
+
+void pmain() {
+    generate_sintab()
+}

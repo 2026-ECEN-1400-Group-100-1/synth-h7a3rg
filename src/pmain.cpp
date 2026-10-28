@@ -1,5 +1,8 @@
 #include "pmain.h"
 
-void pmain() {
+#include "sintab.h"
 
+void pmain() {
+    // generate sin table
+    generate_sintab();
 }
