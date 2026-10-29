@@ -10,6 +10,8 @@
 /// DAC interrupt frequency is 28kHz
 #define DAC_INTERRUPT_FREQ 28000
 
+int freq = 440;
+
 void pmain() {
     // generate sin table
     generate_sintab();
@@ -27,7 +29,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
     static uint16_t dac_accumulator;
     if (htim->Instance == htim1.Instance) {
         // triangle wave
-        dac_accumulator = (dac_accumulator + 100) % 4000; // This ends up as 700Hz
+        dac_accumulator = (dac_accumulator + (freq / 7)) % 4000; // bullshit hack
         HAL_DAC_SetValue(&hdac2, DAC_CHANNEL_1, DAC_ALIGN_12B_R, dac_accumulator);
     }
 }
