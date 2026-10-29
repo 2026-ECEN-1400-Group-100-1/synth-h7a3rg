@@ -7,6 +7,7 @@
 
 #include "sintab.h"
 #include "keys.h"
+#include "notes.h"
 
 /// DAC interrupt frequency is 28kHz
 #define DAC_INTERRUPT_FREQ 28000
@@ -31,7 +32,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
     static uint16_t dac_accumulator;
     if (htim->Instance == htim1.Instance) {
         // triangle wave
-        for (int i = 0; i < 4; ++i) {
+        for (int i = 0; i < NUM_KEYS; ++i) {
             if (key_freq(i) == 0)
                 continue;
             dac_accumulator = (dac_accumulator + (key_freq(i) / 7)) % 4000; // bullshit hack
