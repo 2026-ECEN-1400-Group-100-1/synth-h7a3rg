@@ -3,14 +3,15 @@
 #include <cstdint>
 
 #include "main.h"
-#include "stm32h7xx_hal_conf.h" // does weird circular include bullshit if you move this. Thanks STMicro!
+#include "stm32h7xx_hal.h"
 
 #include "sintab.h"
+#include "keys.h"
 
 /// DAC interrupt frequency is 28kHz
 #define DAC_INTERRUPT_FREQ 28000
 
-int freq = 440;
+int freq = 440 * 2;
 
 void pmain() {
     // generate sin table
@@ -20,8 +21,9 @@ void pmain() {
     HAL_DAC_Start(&hdac2, DAC_CHANNEL_1);
 
     for (;;) {
-        HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
-        HAL_Delay(1000);
+        update_keys();
+
+        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, key_freq(0) == 0 ? GPIO_PIN_SET : GPIO_PIN_RESET);
     }
 }
 
@@ -29,7 +31,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
     static uint16_t dac_accumulator;
     if (htim->Instance == htim1.Instance) {
         // triangle wave
-        dac_accumulator = (dac_accumulator + (freq / 7)) % 4000; // bullshit hack
+        for (int i = 0; i < 4; ++i) {
+            if (key_freq(i) == 0)
+                continue;
+            dac_accumulator = (dac_accumulator + (key_freq(i) / 7)) % 4000; // bullshit hack
+            break;
+        }
+
         HAL_DAC_SetValue(&hdac2, DAC_CHANNEL_1, DAC_ALIGN_12B_R, dac_accumulator);
     }
 }
