@@ -4,7 +4,7 @@
 #include "notes.h"
 
 uint8_t key_states[NUM_KEYS];
-static uint8_t curr_octave = 5;
+static uint8_t curr_octave = 4;
 
 typedef struct Key {
     GPIO_TypeDef* Letter;
