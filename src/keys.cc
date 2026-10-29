@@ -3,9 +3,8 @@
 #include "stm32h7xx_hal.h"
 #include "notes.h"
 
-#define NUM_KEYS 12
-
 uint8_t key_states[NUM_KEYS];
+static uint8_t curr_octave = 5;
 
 typedef struct Key {
     GPIO_TypeDef* Letter;
@@ -26,5 +25,17 @@ void update_keys() {
 }
 
 uint16_t key_freq(uint8_t key_num) {
-    return key_states[key_num] * KEYBOARD_NOTES[5][key_num]; // TODO octave
+    return key_states[key_num] * KEYBOARD_NOTES[curr_octave][key_num];
+}
+
+void set_octave(uint8_t octave) {
+    curr_octave = octave;
+}
+
+void add_octave() {
+    curr_octave = (curr_octave + 1) % NUM_OCTAVES;
+}
+
+void subtract_octave() {
+    curr_octave = (curr_octave - 1) % NUM_OCTAVES;
 }
