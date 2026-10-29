@@ -20,10 +20,10 @@ void pmain() {
     HAL_TIM_Base_Start_IT(&htim1);
     HAL_DAC_Start(&hdac2, DAC_CHANNEL_1);
 
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
+
     for (;;) {
         update_keys();
-
-        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, key_freq(0) == 0 ? GPIO_PIN_SET : GPIO_PIN_RESET);
     }
 }
 
