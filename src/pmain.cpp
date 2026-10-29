@@ -17,6 +17,8 @@ void pmain() {
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
     static uint16_t dac_val;
-    // triangle wave
-    dac_val = (dac_val + 1) % 4095;
+    if (htim->Instance == htim1.Instance) {
+        // triangle wave
+        dac_val = (dac_val + 100) % 4095;
+    }
 }
