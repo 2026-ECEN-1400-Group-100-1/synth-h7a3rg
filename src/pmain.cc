@@ -12,7 +12,8 @@
 /// DAC interrupt frequency is 28kHz
 #define DAC_INTERRUPT_FREQ 28000
 
-int freq = 440 * 2;
+bool oct_down_state = true;
+bool oct_up_state = true;
 
 void pmain() {
     // generate sin table
@@ -25,6 +26,19 @@ void pmain() {
 
     for (;;) {
         update_keys();
+
+        // lazy
+        if (oct_down_state != HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_2)) {
+            oct_down_state = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_2);
+            if (!oct_down_state) subtract_octave();
+            HAL_Delay(50);
+        }
+
+        if (oct_up_state != HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10)) {
+            oct_up_state = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10);
+            if (!oct_up_state) add_octave();
+            HAL_Delay(50);
+        }
     }
 }
 
