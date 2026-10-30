@@ -12,8 +12,8 @@
 /// DAC interrupt frequency is 28kHz
 #define DAC_INTERRUPT_FREQ 28000
 
-bool oct_down_state = true;
-bool oct_up_state = true;
+static bool oct_down_state = true;
+static bool oct_up_state = true;
 
 void pmain() {
     // generate sin table
