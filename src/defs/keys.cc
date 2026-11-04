@@ -3,23 +3,12 @@
 #include "stm32h7xx_hal.h"
 #include "notes.h"
 
+#include "hardware/pin.hh"
+
 uint8_t key_states[NUM_KEYS];
 uint8_t curr_octave = 4;
 
-struct Key {
-    GPIO_TypeDef* Letter;
-    uint16_t Pin;
-
-    /// @brief Reads the current state of the key
-    [[nodiscard]]
-    bool read() const;
-};
-
-bool Key::read() const {
-    return HAL_GPIO_ReadPin(Letter, Pin);
-}
-
-const static Key KEYS[NUM_KEYS] = {
+const static hardware::Pin KEYS[NUM_KEYS] = {
     {GPIOC, GPIO_PIN_15},
     {GPIOC, GPIO_PIN_14},
     {GPIOC, GPIO_PIN_13},
@@ -34,7 +23,7 @@ const static Key KEYS[NUM_KEYS] = {
     {GPIOC, GPIO_PIN_11},
 };
 
-const static Key OCTAVE_CTRL_KEYS[2] = {
+const static hardware::Pin OCTAVE_CTRL_KEYS[2] = {
     {GPIOB, GPIO_PIN_10},
     {GPIOB, GPIO_PIN_2},
 };
