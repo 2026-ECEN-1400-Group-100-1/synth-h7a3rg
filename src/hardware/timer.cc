@@ -4,7 +4,7 @@
 
 namespace {
 
-hardware::Timer* timers[16];
+hardware::Timer* timers[MAX_TIMERS];
 uint8_t num_timers = 0;
 
 }
@@ -38,8 +38,13 @@ void Timer::start() {
     HAL_TIM_Base_Start_IT(_timer);
 }
 
+void Timer::stop() {
+    HAL_TIM_Base_Stop_IT(_timer);
+}
 } // namespace hardware
 
+// the actual interrupt called by the timer on interrupt
+// it just defers to the static handler in Timer
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
     hardware::Timer::handle_timer_interrupt(htim);
 }
