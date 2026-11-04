@@ -13,15 +13,15 @@
 /// DAC interrupt frequency is 28kHz
 #define DAC_INTERRUPT_FREQ 28000
 
+static synth::SynthTimer synth_tim(&htim1,
+    &hdac2, DAC_CHANNEL_1, DAC_ALIGN_12B_R,
+    DAC_INTERRUPT_FREQ);
+
 void pmain() {
     // generate sin table
     generate_sintab();
 
     HAL_DAC_Start(&hdac2, DAC_CHANNEL_1);
-
-    synth::SynthTimer synth_tim(&htim1,
-        &hdac2, DAC_CHANNEL_1, DAC_ALIGN_12B_R,
-        DAC_INTERRUPT_FREQ);
 
     synth_tim.start();
 
