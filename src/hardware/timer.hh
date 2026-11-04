@@ -8,24 +8,25 @@ typedef void (*TimerCallback)();
 
 class Timer {
 public:
-    Timer(const TimerCallback callback, TIM_HandleTypeDef* timer)
-        : _callback(callback), _timer(timer) { register_timer(); }
+    Timer(TIM_HandleTypeDef* timer)
+        : _timer(timer) { register_timer(); }
+
+    virtual ~Timer();
 
     [[nodiscard]]
     TIM_HandleTypeDef* timer() const {
         return _timer;
     }
 
-    void callback() const {
-        _callback();
-    }
+    virtual void callback() = 0;
 
     static void handle_timer_interrupt(TIM_HandleTypeDef* timer);
 
-private:
-    void register_timer();
+    void start();
 
-    const TimerCallback _callback;
+private:
+    bool register_timer();
+
     TIM_HandleTypeDef* _timer;
 
     uint8_t timer_index;

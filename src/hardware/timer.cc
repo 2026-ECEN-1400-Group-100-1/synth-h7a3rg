@@ -11,6 +11,10 @@ uint8_t num_timers = 0;
 
 namespace hardware {
 
+Timer::~Timer() {
+    // TODO if this ever becomes a problem (probably not)
+}
+
 void Timer::handle_timer_interrupt(TIM_HandleTypeDef* htim) {
     for (int i = 0; i < num_timers; ++i) {
         if (timers[i]->timer() == htim) {
@@ -20,14 +24,18 @@ void Timer::handle_timer_interrupt(TIM_HandleTypeDef* htim) {
     }
 }
 
-void Timer::register_timer() {
-    HAL_TIM_Base_Start_IT(_timer);
-
+bool Timer::register_timer() {
     if (num_timers >= MAX_TIMERS)
-        return; // TODO throw/log error
+        return false; // TODO throw/log error
 
     timer_index = num_timers++;
     timers[timer_index] = this;
+
+    return true;
+}
+
+void Timer::start() {
+    HAL_TIM_Base_Start_IT(_timer);
 }
 
 } // namespace hardware

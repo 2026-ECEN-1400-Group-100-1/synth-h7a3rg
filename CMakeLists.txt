@@ -46,10 +46,11 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
         src/pmain.cc
-        src/sintab.c
+        src/synth/sintab.c
         src/defs/keys.cc
         src/hardware/pin.cc
         src/hardware/timer.cc
+        src/synth/interrupt.cc
 )
 
 # Add include paths
