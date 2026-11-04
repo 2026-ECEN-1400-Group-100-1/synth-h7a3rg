@@ -1,19 +1,34 @@
 #pragma once
 
-#include "stm32h7xx_hal_conf.h"
+#include "stm32h7xx_hal.h"
+
+namespace hardware {
 
 typedef void (*TimerCallback)();
 
 class Timer {
 public:
-    Timer(const TimerCallback callback, const TIM_HandleTypeDef* timer)
-        : _callback(callback), _timer(timer) {}
+    Timer(const TimerCallback callback, TIM_HandleTypeDef* timer)
+        : _callback(callback), _timer(timer) { register_timer(); }
 
-    const TIM_HandleTypeDef* timer() const {
+    [[nodiscard]]
+    TIM_HandleTypeDef* timer() const {
         return _timer;
     }
 
+    void callback() const {
+        _callback();
+    }
+
+    static void handle_timer_interrupt(TIM_HandleTypeDef* timer);
+
 private:
+    void register_timer();
+
     const TimerCallback _callback;
-    const TIM_HandleTypeDef* _timer;
+    TIM_HandleTypeDef* _timer;
+
+    uint8_t timer_index;
 };
+
+} // namespace hardware
