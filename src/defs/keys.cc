@@ -4,12 +4,20 @@
 #include "notes.h"
 
 uint8_t key_states[NUM_KEYS];
-static uint8_t curr_octave = 4;
+uint8_t curr_octave = 4;
 
-typedef struct Key {
+struct Key {
     GPIO_TypeDef* Letter;
     uint16_t Pin;
-} Key;
+
+    /// @brief Reads the current state of the key
+    [[nodiscard]]
+    bool read() const;
+};
+
+bool Key::read() const {
+    return HAL_GPIO_ReadPin(Letter, Pin);
+}
 
 const static Key KEYS[NUM_KEYS] = {
     {GPIOC, GPIO_PIN_15},
@@ -26,9 +34,31 @@ const static Key KEYS[NUM_KEYS] = {
     {GPIOC, GPIO_PIN_11},
 };
 
+const static Key OCTAVE_CTRL_KEYS[2] = {
+    {GPIOB, GPIO_PIN_10},
+    {GPIOB, GPIO_PIN_2},
+};
+
 void update_keys() {
     for (int i = 0; i < NUM_KEYS; ++i) {
-        key_states[i] = !HAL_GPIO_ReadPin(KEYS[i].Letter, KEYS[i].Pin);
+        key_states[i] = !KEYS[i].read();
+    }
+}
+
+void update_octave_from_keys() {
+    static bool oct_up_state = true;
+    static bool oct_down_state = true;
+
+    if (OCTAVE_CTRL_KEYS[0].read() != oct_up_state) {
+        oct_up_state = !oct_up_state;
+        add_octave();
+        HAL_Delay(50); // TODO make this not suck
+    }
+
+    if (OCTAVE_CTRL_KEYS[1].read() != oct_down_state) {
+        oct_down_state = !oct_down_state;
+        subtract_octave();
+        HAL_Delay(50); // TODO make this not suck
     }
 }
 

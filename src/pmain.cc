@@ -6,14 +6,11 @@
 #include "stm32h7xx_hal.h"
 
 #include "sintab.h"
-#include "keys.h"
-#include "notes.h"
+#include "defs/keys.h"
+#include "defs/notes.h"
 
 /// DAC interrupt frequency is 28kHz
 #define DAC_INTERRUPT_FREQ 28000
-
-static bool oct_down_state = true;
-static bool oct_up_state = true;
 
 void pmain() {
     // generate sin table
@@ -26,19 +23,7 @@ void pmain() {
 
     for (;;) {
         update_keys();
-
-        // lazy
-        if (oct_down_state != HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_2)) {
-            oct_down_state = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_2);
-            if (!oct_down_state) subtract_octave();
-            HAL_Delay(50);
-        }
-
-        if (oct_up_state != HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10)) {
-            oct_up_state = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10);
-            if (!oct_up_state) add_octave();
-            HAL_Delay(50);
-        }
+        update_octave_from_keys();
     }
 }
 
