@@ -8,8 +8,14 @@ typedef void (*TimerCallback)();
 
 class Timer {
 public:
-    Timer(TIM_HandleTypeDef* timer)
+    explicit Timer(TIM_HandleTypeDef* timer)
         : _timer(timer) { register_timer(); }
+
+    // No copy or move
+    Timer(const Timer&) = delete;
+    Timer& operator=(const Timer&) = delete;
+    Timer(Timer&&) = delete;
+    Timer& operator=(Timer&&) = delete;
 
     virtual ~Timer();
 
@@ -29,7 +35,7 @@ private:
 
     TIM_HandleTypeDef* _timer;
 
-    uint8_t timer_index;
+    uint8_t timer_index = 0;
 };
 
 } // namespace hardware
