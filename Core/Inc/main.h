@@ -59,6 +59,30 @@ extern TIM_HandleTypeDef htim1;
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define KEY12_IN_Pin GPIO_PIN_3
+#define KEY12_IN_GPIO_Port GPIOA
+#define KEY2_IN_Pin GPIO_PIN_4
+#define KEY2_IN_GPIO_Port GPIOA
+#define KEY4_IN_Pin GPIO_PIN_5
+#define KEY4_IN_GPIO_Port GPIOA
+#define KEY6_IN_Pin GPIO_PIN_2
+#define KEY6_IN_GPIO_Port GPIOB
+#define KEY8_IN_Pin GPIO_PIN_10
+#define KEY8_IN_GPIO_Port GPIOB
+#define KEY10_IN_Pin GPIO_PIN_12
+#define KEY10_IN_GPIO_Port GPIOB
+#define KEY11_IN_Pin GPIO_PIN_14
+#define KEY11_IN_GPIO_Port GPIOB
+#define KEY9_IN_Pin GPIO_PIN_15
+#define KEY9_IN_GPIO_Port GPIOB
+#define KEY7_IN_Pin GPIO_PIN_6
+#define KEY7_IN_GPIO_Port GPIOC
+#define KEY5_IN_Pin GPIO_PIN_7
+#define KEY5_IN_GPIO_Port GPIOC
+#define KEY3_IN_Pin GPIO_PIN_9
+#define KEY3_IN_GPIO_Port GPIOC
+#define KEY1_IN_Pin GPIO_PIN_8
+#define KEY1_IN_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
 
