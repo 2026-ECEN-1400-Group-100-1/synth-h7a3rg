@@ -8,7 +8,11 @@
 #include "synth/sintab.h"
 #include "defs/keys.h"
 
+#include "input/interrupt.hh"
+
 #include "synth/interrupt.hh"
+
+static input::InputTimer input_tim(&htim2);
 
 /// DAC interrupt frequency is 28kHz
 #define DAC_INTERRUPT_FREQ 28000
@@ -24,6 +28,7 @@ void pmain() {
     HAL_DAC_Start(&hdac2, DAC_CHANNEL_1);
 
     synth_tim.start();
+    input_tim.start();
 
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
 
