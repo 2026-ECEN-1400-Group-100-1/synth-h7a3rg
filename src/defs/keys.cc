@@ -3,15 +3,12 @@
 #include "stm32h7xx_hal.h"
 #include "notes.h"
 
+#include "hardware/pin.hh"
+
 uint8_t key_states[NUM_KEYS];
-static uint8_t curr_octave = 4;
+uint8_t curr_octave = 4;
 
-typedef struct Key {
-    GPIO_TypeDef* Letter;
-    uint16_t Pin;
-} Key;
-
-const static Key KEYS[NUM_KEYS] = {
+const static hardware::Pin KEYS[NUM_KEYS] = {
     {GPIOA, GPIO_PIN_8},
     {GPIOA, GPIO_PIN_4},
     {GPIOC, GPIO_PIN_9},
@@ -26,9 +23,31 @@ const static Key KEYS[NUM_KEYS] = {
     {GPIOA, GPIO_PIN_3},
 };
 
+const static hardware::Pin OCTAVE_CTRL_KEYS[2] = {
+    {GPIOA, GPIO_PIN_10},
+    {GPIOA, GPIO_PIN_9},
+};
+
 void update_keys() {
     for (int i = 0; i < NUM_KEYS; ++i) {
-        key_states[i] = !HAL_GPIO_ReadPin(KEYS[i].Letter, KEYS[i].Pin);
+        key_states[i] = !KEYS[i].read();
+    }
+}
+
+void update_octave_from_keys() {
+    static bool oct_up_state = true;
+    static bool oct_down_state = true;
+
+    if (OCTAVE_CTRL_KEYS[0].read() != oct_up_state) {
+        oct_up_state = !oct_up_state;
+        add_octave();
+        HAL_Delay(50); // TODO make this not suck
+    }
+
+    if (OCTAVE_CTRL_KEYS[1].read() != oct_down_state) {
+        oct_down_state = !oct_down_state;
+        subtract_octave();
+        HAL_Delay(50); // TODO make this not suck
     }
 }
 

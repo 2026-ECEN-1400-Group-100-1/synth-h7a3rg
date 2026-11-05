@@ -32,8 +32,7 @@ message("Build type: " ${CMAKE_BUILD_TYPE})
 enable_language(C CXX ASM)
 
 # Create an executable object type
-add_executable(${CMAKE_PROJECT_NAME}
-        src/keys.h)
+add_executable(${CMAKE_PROJECT_NAME})
 
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)
@@ -47,8 +46,11 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
         src/pmain.cc
-        src/sintab.c
-        src/keys.cc
+        src/synth/sintab.c
+        src/defs/keys.cc
+        src/hardware/pin.cc
+        src/hardware/timer.cc
+        src/synth/interrupt.cc
 )
 
 # Add include paths
