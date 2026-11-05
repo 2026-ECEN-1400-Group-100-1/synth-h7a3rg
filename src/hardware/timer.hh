@@ -10,7 +10,6 @@ class Timer {
 public:
     /// @brief Initializes and registers a timer
     /// @note The timer is not immediately started, start() must be called
-    [[jetbrains::has_side_effects]]
     explicit Timer(TIM_HandleTypeDef* timer)
         : _timer(timer) { register_timer(); }
 
