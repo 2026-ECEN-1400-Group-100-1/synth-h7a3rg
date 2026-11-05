@@ -3,7 +3,17 @@
 namespace input {
 
 void InputTimer::callback() {
-    // TODO actual input :)
+    for (uint8_t i = 0; i < _num_handlers; ++i) {
+        _handlers[i]->update();
+    }
+}
+
+bool InputTimer::register_handler(InputHandler *handler) {
+    if (_num_handlers >= MAX_INPUT_HANDLERS)
+        return false;
+
+    _handlers[_num_handlers++] = handler;
+    return true;
 }
 
 }
