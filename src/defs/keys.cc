@@ -24,8 +24,8 @@ const static hardware::Pin KEYS[NUM_KEYS] = {
 };
 
 const static hardware::Pin OCTAVE_CTRL_KEYS[2] = {
-    {GPIOB, GPIO_PIN_10},
-    {GPIOB, GPIO_PIN_2},
+    {GPIOA, GPIO_PIN_10},
+    {GPIOA, GPIO_PIN_9},
 };
 
 void update_keys() {
