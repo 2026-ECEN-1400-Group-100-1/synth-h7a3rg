@@ -22,6 +22,7 @@ public:
     /// @brief Currently does nothing. Don't let timers leave scope!
     virtual ~Timer();
 
+    /// @brief Returns the TIM_HandleTypeDef* of the timer
     [[nodiscard]]
     TIM_HandleTypeDef* timer() const {
         return _timer;
@@ -33,14 +34,19 @@ public:
     /// @brief Stops the timer
     void stop();
 
+protected:
     /// @brief The function that will be called when the timer triggers
     virtual void callback() = 0;
+
+private:
+    // Let the HAL timer callback access private functions (handle_timer_interrupt)
+    friend void ::HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim);
 
     /// @brief Called only by HAL_TIM_PeriodElapsedCallback
     static void handle_timer_interrupt(TIM_HandleTypeDef* timer);
 
-private:
     /// @brief Adds the timer to the timer array so its callback can be called
+    /// @note Should only be called by the constructor
     bool register_timer();
 
     TIM_HandleTypeDef* _timer;

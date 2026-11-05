@@ -4,7 +4,7 @@
 
 namespace synth {
 
-class SynthTimer : public hardware::Timer {
+class SynthTimer final : public hardware::Timer {
 public:
     explicit SynthTimer(TIM_HandleTypeDef* timer,
         DAC_HandleTypeDef* dac,
@@ -15,7 +15,9 @@ public:
         _dac(dac), _dac_channel(dac_channel), _dac_align(dac_align),
         _interrupt_frequency(interrupt_frequency) {}
 
+protected:
     void callback() override;
+
 private:
     DAC_HandleTypeDef* _dac;
     uint32_t _dac_channel;
