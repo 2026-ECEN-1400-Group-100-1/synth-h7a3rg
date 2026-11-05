@@ -21,6 +21,9 @@ void SynthTimer::callback() {
         break;
     }
 
+    if (num_keys <= 0)
+        return;
+
     dac_out *= 4095;
     dac_out /= static_cast<double>(num_keys);
 
