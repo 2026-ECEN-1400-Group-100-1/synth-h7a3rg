@@ -51,6 +51,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
         src/hardware/pin.cc
         src/hardware/timer.cc
         src/synth/interrupt.cc
+        src/input/interrupt.cc
 )
 
 # Add include paths
