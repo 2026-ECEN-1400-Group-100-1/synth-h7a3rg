@@ -12,18 +12,18 @@ typedef struct Key {
 } Key;
 
 const static Key KEYS[NUM_KEYS] = {
-    {GPIOC, GPIO_PIN_15},
-    {GPIOC, GPIO_PIN_14},
-    {GPIOC, GPIO_PIN_13},
-    {GPIOB, GPIO_PIN_8},
-    {GPIOB, GPIO_PIN_7},
-    {GPIOB, GPIO_PIN_6},
-    {GPIOB, GPIO_PIN_5},
-    {GPIOB, GPIO_PIN_4},
-    {GPIOB, GPIO_PIN_3},
-    {GPIOD, GPIO_PIN_2},
-    {GPIOC, GPIO_PIN_12},
-    {GPIOC, GPIO_PIN_11},
+    {GPIOA, GPIO_PIN_8},
+    {GPIOA, GPIO_PIN_4},
+    {GPIOC, GPIO_PIN_9},
+    {GPIOA, GPIO_PIN_5},
+    {GPIOC, GPIO_PIN_7},
+    {GPIOB, GPIO_PIN_2},
+    {GPIOC, GPIO_PIN_6},
+    {GPIOB, GPIO_PIN_10},
+    {GPIOB, GPIO_PIN_15},
+    {GPIOB, GPIO_PIN_12},
+    {GPIOB, GPIO_PIN_14},
+    {GPIOA, GPIO_PIN_3},
 };
 
 void update_keys() {

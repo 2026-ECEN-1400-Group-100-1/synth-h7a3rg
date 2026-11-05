@@ -27,6 +27,7 @@ void pmain() {
     for (;;) {
         update_keys();
 
+        continue;
         // lazy
         if (oct_down_state != HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_2)) {
             oct_down_state = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_2);
