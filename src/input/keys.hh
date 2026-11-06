@@ -11,9 +11,11 @@ public:
     explicit KeyHandler(const OctaveHandler& octave_ctrl)
         : _key_states(), _octave_ctrl(octave_ctrl) {}
 
+    /// @brief Gets the current state (up or down) of key_index
     [[nodiscard]]
     bool key_state(uint8_t key_index) const { return _key_states[key_index]; }
 
+    /// @brief Gets the frequency that the note should be playing (0 if none)
     [[nodiscard]]
     uint8_t key_freq(uint8_t key_num) const;
 
