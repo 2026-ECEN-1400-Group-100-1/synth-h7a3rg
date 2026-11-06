@@ -1,17 +1,11 @@
 #pragma once
 
+#include "defs/keys.hh"
 #include "hardware/pin.hh"
 #include "handler.hh"
 
 namespace input {
 
-struct OctaveKeys {
-    hardware::Pin octave_up;
-    hardware::Pin octave_down;
-
-    bool octave_up_prev = false;
-    bool octave_down_prev = false;
-};
 
 class OctaveHandler final : public InputHandler {
 public:
@@ -27,7 +21,11 @@ public:
 
 private:
     OctaveKeys& _keys;
-    uint8_t _curr_octave = 5;
+
+    bool _octave_up_prev = false;
+    bool _octave_down_prev = false;
+
+    uint8_t _curr_octave = 4;
 };
 
 } // namespace input

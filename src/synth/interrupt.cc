@@ -1,10 +1,15 @@
 #include "interrupt.hh"
 
 #include "main.h"
-#include "defs/keys.h"
+#include "defs/keys.hh"
 #include "defs/notes.h"
 
 namespace synth {
+
+// temp until refactor
+static uint16_t key_freq(uint8_t _) {
+    return 0;
+}
 
 void SynthTimer::callback() {
     _dac_accumulator += 1.0 / _interrupt_frequency;

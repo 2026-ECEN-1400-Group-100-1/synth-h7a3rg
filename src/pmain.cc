@@ -1,15 +1,11 @@
 #include "pmain.h"
 
-#include <cstdint>
-
 #include "main.h"
 #include "stm32h7xx_hal.h"
 
 #include "synth/sintab.h"
-#include "defs/keys.h"
 
 #include "input/interrupt.hh"
-
 #include "synth/interrupt.hh"
 
 static input::InputTimer input_tim(&htim2);
@@ -33,6 +29,6 @@ void pmain() {
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
 
     for (;;) {
-        update_keys();
+        __NOP();
     }
 }
