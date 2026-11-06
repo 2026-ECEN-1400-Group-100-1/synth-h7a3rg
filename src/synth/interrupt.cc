@@ -6,11 +6,6 @@
 
 namespace synth {
 
-// temp until refactor
-static uint16_t key_freq(uint8_t _) {
-    return 0;
-}
-
 void SynthTimer::callback() {
     _dac_accumulator += 1.0 / _interrupt_frequency;
 
@@ -18,11 +13,11 @@ void SynthTimer::callback() {
     uint8_t num_keys = 0;
 
     for (int i = 0; i < NUM_KEYS; ++i) {
-        if (key_freq(i) == 0)
+        if (_key_handler.key_freq(i) == 0)
             continue;
 
         ++num_keys;
-        dac_out += sin(2 * M_PI * key_freq(i) * _dac_accumulator) + 1;
+        dac_out += sin(2 * M_PI * _key_handler.key_freq(i) * _dac_accumulator) + 1;
         break;
     }
 
@@ -36,4 +31,4 @@ void SynthTimer::callback() {
         static_cast<uint16_t>(dac_out));
 }
 
-}
+} // namespace synth
