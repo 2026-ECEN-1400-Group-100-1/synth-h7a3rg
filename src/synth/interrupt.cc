@@ -13,11 +13,12 @@ void SynthTimer::callback() {
     uint8_t num_keys = 0;
 
     for (int i = 0; i < NUM_KEYS; ++i) {
-        if (_key_handler.key_freq(i) == 0)
+        const uint8_t frequency = _key_handler.key_freq(i);
+        if (frequency == 0)
             continue;
 
         ++num_keys;
-        dac_out += sin(2 * M_PI * _key_handler.key_freq(i) * _dac_accumulator) + 1;
+        dac_out += sin(2 * M_PI * frequency * _dac_accumulator) + 1;
         break;
     }
 
