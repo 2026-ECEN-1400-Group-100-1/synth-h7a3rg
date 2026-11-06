@@ -34,6 +34,5 @@ void pmain() {
 
     for (;;) {
         update_keys();
-        update_octave_from_keys();
     }
 }
