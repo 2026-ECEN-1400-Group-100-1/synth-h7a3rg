@@ -1,21 +1,21 @@
 #include "pmain.h"
 
-#include <cstdint>
-
 #include "main.h"
 #include "stm32h7xx_hal.h"
 
 #include "synth/sintab.h"
 #include "defs/keys.h"
 
+#include "hardware/dac.hh"
+
 #include "synth/interrupt.hh"
 
 /// DAC interrupt frequency is 28kHz
 #define DAC_INTERRUPT_FREQ 28000
 
-static synth::SynthTimer synth_tim(&htim1,
-    &hdac2, DAC_CHANNEL_1, DAC_ALIGN_12B_R,
-    DAC_INTERRUPT_FREQ);
+static hardware::DAC dac2(&hdac2, DAC_CHANNEL_1, DAC_ALIGN_12B_R);
+
+static synth::SynthTimer synth_tim(&htim1, dac2, DAC_INTERRUPT_FREQ);
 
 void pmain() {
     // generate sin table
