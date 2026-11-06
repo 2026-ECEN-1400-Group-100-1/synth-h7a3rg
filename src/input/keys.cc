@@ -8,4 +8,9 @@ void KeyHandler::update() {
     }
 }
 
+uint8_t KeyHandler::key_freq(uint8_t key_num) const {
+    return KEYBOARD_NOTES[_octave_ctrl.curr_octave()][key_num];
+}
+
+
 } // namespace input
