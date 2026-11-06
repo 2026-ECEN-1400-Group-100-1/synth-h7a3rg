@@ -29,7 +29,7 @@ void pmain() {
 
     dac2.start();
 
-    input_tim.register_handler(&octave_handle);
+    // input_tim.register_handler(&octave_handle);
     input_tim.register_handler(&key_handle);
     input_tim.start();
 
