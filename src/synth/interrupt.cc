@@ -19,13 +19,12 @@ void SynthTimer::callback() {
 
         ++num_keys;
         dac_out += sin(2 * M_PI * frequency * _dac_accumulator) + 1;
-        break;
     }
 
     if (num_keys <= 0)
         return;
 
-    dac_out *= 4095;
+    dac_out *= 2048;
     dac_out /= static_cast<double>(num_keys);
 
     _dac.write(static_cast<uint16_t>(dac_out));
