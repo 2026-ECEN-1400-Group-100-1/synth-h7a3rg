@@ -20,4 +20,4 @@ void OctaveHandler::update() {
     }
 }
 
-}
+} // namespace input

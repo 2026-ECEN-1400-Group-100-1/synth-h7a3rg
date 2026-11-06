@@ -30,4 +30,4 @@ private:
     uint8_t _curr_octave = 5;
 };
 
-}
+} // namespace input

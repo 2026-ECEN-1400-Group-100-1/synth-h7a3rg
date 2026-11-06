@@ -25,4 +25,4 @@ private:
     uint8_t _num_handlers = 0;
 };
 
-}
+} // namespace input

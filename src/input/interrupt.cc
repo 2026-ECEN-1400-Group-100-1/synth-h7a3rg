@@ -16,4 +16,4 @@ bool InputTimer::register_handler(InputHandler *handler) {
     return true;
 }
 
-}
+} // namespace input
