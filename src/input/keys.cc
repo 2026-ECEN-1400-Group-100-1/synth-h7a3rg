@@ -10,6 +10,9 @@ void KeyHandler::update() {
 }
 
 uint8_t KeyHandler::key_freq(uint8_t key_num) const {
+    if (!key_state(key_num))
+        return 0;
+
     return KEYBOARD_NOTES[_octave_ctrl.curr_octave()][key_num];
 }
 
