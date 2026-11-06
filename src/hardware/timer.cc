@@ -17,7 +17,7 @@ Timer::~Timer() {
 
 void Timer::handle_timer_interrupt(TIM_HandleTypeDef* htim) {
     for (int i = 0; i < num_timers; ++i) {
-        if (timers[i]->timer() == htim) {
+        if (timers[i]->timer()->Instance == htim->Instance) {
             timers[i]->callback();
             return;
         }
@@ -41,6 +41,7 @@ void Timer::start() {
 void Timer::stop() {
     HAL_TIM_Base_Stop_IT(_timer);
 }
+
 } // namespace hardware
 
 // the actual interrupt called by the timer on interrupt

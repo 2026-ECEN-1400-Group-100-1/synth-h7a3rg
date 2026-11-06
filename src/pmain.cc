@@ -5,6 +5,8 @@
 
 #include "synth/sintab.h"
 
+#include "hardware/dac.hh"
+
 #include "input/interrupt.hh"
 #include "input/keys.hh"
 #include "input/octave.hh"
@@ -17,9 +19,9 @@ static input::KeyHandler key_handle(octave_handle);
 /// DAC interrupt frequency is 28kHz
 #define DAC_INTERRUPT_FREQ 28000
 
-static synth::SynthTimer synth_tim(&htim1,
-    &hdac2, DAC_CHANNEL_1, DAC_ALIGN_12B_R,
-    DAC_INTERRUPT_FREQ, key_handle);
+static hardware::DAC dac2(&hdac2, DAC_CHANNEL_1, DAC_ALIGN_12B_R);
+
+static synth::SynthTimer synth_tim(&htim1, dac2, DAC_INTERRUPT_FREQ, key_handle);
 
 void pmain() {
     // generate sin table
