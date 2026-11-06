@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 namespace input {
 
 class InputHandler {
@@ -9,7 +11,7 @@ public:
     virtual ~InputHandler() = default;
 
 protected:
-    virtual void update() = 0;
+    virtual void update(uint32_t cycles) = 0;
 };
 
 } // namespace input

@@ -2,7 +2,7 @@
 
 namespace input {
 
-void KeyHandler::update() {
+void KeyHandler::update(uint32_t cycles) {
     for (uint8_t i = 0; i < NUM_KEYS; ++i) {
         // inverted logic due to pullup resistors
         _key_states[i] = !KEYS[i].read();

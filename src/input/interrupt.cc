@@ -4,8 +4,9 @@ namespace input {
 
 void InputTimer::callback() {
     for (uint8_t i = 0; i < _num_handlers; ++i) {
-        _handlers[i]->update();
+        _handlers[i]->update(_cycle);
     }
+    ++_cycle;
 }
 
 bool InputTimer::register_handler(InputHandler *handler) {

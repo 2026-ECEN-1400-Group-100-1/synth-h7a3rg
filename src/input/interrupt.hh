@@ -23,6 +23,8 @@ protected:
 private:
     InputHandler* _handlers[MAX_INPUT_HANDLERS];
     uint8_t _num_handlers = 0;
+
+    uint32_t _cycle = 0;
 };
 
 } // namespace input

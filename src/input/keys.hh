@@ -20,7 +20,7 @@ public:
     uint8_t key_freq(uint8_t key_num) const;
 
 protected:
-    void update() override;
+    void update(uint32_t cycles) override;
 
 private:
     bool _key_states[NUM_KEYS];
