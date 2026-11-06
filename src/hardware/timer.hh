@@ -7,6 +7,9 @@ namespace hardware {
 typedef void (*TimerCallback)();
 
 class Timer {
+    // Let the HAL timer callback access private functions (handle_timer_interrupt)
+    friend void ::HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim);
+
 public:
     /// @brief Initializes and registers a timer
     /// @note The timer is not immediately started, start() must be called
@@ -39,9 +42,6 @@ protected:
     virtual void callback() = 0;
 
 private:
-    // Let the HAL timer callback access private functions (handle_timer_interrupt)
-    friend void ::HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim);
-
     /// @brief Called only by HAL_TIM_PeriodElapsedCallback
     static void handle_timer_interrupt(TIM_HandleTypeDef* timer);
 

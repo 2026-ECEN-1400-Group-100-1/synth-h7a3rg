@@ -10,10 +10,11 @@ class OctaveHandler final : public InputHandler {
 public:
     OctaveHandler() = default;
 
-    void update() override;
-
     [[nodiscard]]
     uint8_t curr_octave() const { return _curr_octave; }
+
+protected:
+    void update() override;
 
 private:
     bool _octave_up_prev = false;
