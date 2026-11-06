@@ -8,10 +8,7 @@ namespace input {
 
 class OctaveHandler final : public InputHandler {
 public:
-    /// @brief Initializes the octave handler
-    /// @note OctaveKeys keys is taken by reference, keep it in scope
-    /// preferably by making it a static global struct
-    explicit OctaveHandler(const OctaveKeys& keys) : _keys(keys) {}
+    OctaveHandler() = default;
 
     void update() override;
 
@@ -19,8 +16,6 @@ public:
     uint8_t curr_octave() const { return _curr_octave; }
 
 private:
-    const OctaveKeys& _keys;
-
     bool _octave_up_prev = false;
     bool _octave_down_prev = false;
 

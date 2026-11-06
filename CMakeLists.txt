@@ -52,6 +52,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
         src/synth/interrupt.cc
         src/input/interrupt.cc
         src/input/octave.cc
+        src/input/keys.cc
 )
 
 # Add include paths
