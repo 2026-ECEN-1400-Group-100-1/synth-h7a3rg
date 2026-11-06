@@ -27,8 +27,7 @@ void SynthTimer::callback() {
     dac_out *= 4095;
     dac_out /= static_cast<double>(num_keys);
 
-    HAL_DAC_SetValue(_dac, _dac_channel, _dac_align,
-        static_cast<uint16_t>(dac_out));
+    _dac.write(static_cast<uint16_t>(dac_out));
 }
 
 }
