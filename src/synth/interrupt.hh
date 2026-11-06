@@ -7,7 +7,7 @@ namespace synth {
 
 class SynthTimer final : public hardware::Timer {
 public:
-    explicit SynthTimer(TIM_HandleTypeDef* timer,
+    SynthTimer(TIM_HandleTypeDef* timer,
         hardware::DAC& dac,
         uint32_t interrupt_frequency)
         : Timer(timer),
