@@ -45,3 +45,31 @@ const OctaveKeys OCTAVE_KEYS = {
     {GPIOA, GPIO_PIN_9},
     {GPIOA, GPIO_PIN_8},
 };
+
+/// @brief Struct to contain matrix definitions, such as size and pinout
+struct Matrix {
+    const hardware::Pin* Rows;
+    const hardware::Pin* Cols;
+
+    const uint8_t RowCount;
+    const uint8_t ColCount;
+};
+
+const hardware::Pin MATRIX_ROW_PINS[] = {
+    // TODO put pins here
+    {GPIOA, GPIO_PIN_0},
+};
+constexpr uint8_t MATRIX_ROWS = sizeof(MATRIX_ROW_PINS) / sizeof(hardware::Pin);
+
+const hardware::Pin MATRIX_COL_PINS[] = {
+    // TODO put pins here
+    {GPIOA, GPIO_PIN_0},
+};
+constexpr uint8_t MATRIX_COLS = sizeof(MATRIX_COL_PINS) / sizeof(hardware::Pin);
+
+const Matrix MATRIX_KEYS = {
+    .Rows = MATRIX_ROW_PINS,
+    .Cols = MATRIX_COL_PINS,
+    .RowCount = MATRIX_ROWS,
+    .ColCount = MATRIX_COLS,
+};

@@ -27,7 +27,7 @@ void OctaveHandler::update(uint32_t cycles) {
 }
 
 bool OctaveHandler::should_update(uint32_t cycles) const {
-    return _last_update < cycles + _update_threshold;
+    return _last_update + _update_threshold < cycles;
 }
 
 } // namespace input
