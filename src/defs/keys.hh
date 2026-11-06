@@ -36,8 +36,8 @@ const hardware::Pin KEYS[NUM_KEYS] = {
 
 /// @brief Struct to contain octave up and down hardware pins
 struct OctaveKeys {
-    hardware::Pin octave_up;
-    hardware::Pin octave_down;
+    const hardware::Pin octave_up;
+    const hardware::Pin octave_down;
 };
 
 /// @brief The hardware pins for the octave keys
