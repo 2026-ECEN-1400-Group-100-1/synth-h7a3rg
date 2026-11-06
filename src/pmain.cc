@@ -27,7 +27,7 @@ void pmain() {
     // generate sin table
     generate_sintab();
 
-    HAL_DAC_Start(&hdac2, DAC_CHANNEL_1);
+    dac2.start();
 
     input_tim.register_handler(&octave_handle);
     input_tim.register_handler(&key_handle);

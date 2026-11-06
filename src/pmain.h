@@ -5,6 +5,7 @@ extern "C" {
 #endif
 
 /// @brief User entry point
+[[noreturn]]
 void pmain(void);
 
 #ifdef __cplusplus
