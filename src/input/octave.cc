@@ -18,6 +18,9 @@ void OctaveHandler::update() {
             --_curr_octave;
         // TODO debounce
     }
+
+    // prevent octave overruns
+    _curr_octave %= NUM_OCTAVES;
 }
 
 } // namespace input
