@@ -20,15 +20,11 @@ struct PoolNode {
 
     // conversion operators
     // TODO(?) this will shit itself at runtime if T is not copy constructable
-    operator T() const { return _data; }
-    operator T&() { return _data; }
+    operator T() const { return data; }
+    operator T&() { return data; }
 
-    T& data() { return _data; }
-
-private:
-    PoolNode* _next = nullptr;
-
-    T _data;
+    PoolNode* next = nullptr;
+    T data;
 };
 
 template <typename T>
@@ -74,7 +70,7 @@ PoolNode<T>* PoolManager<T>::alloc_one() {
 
     // pop head
     PoolNode<T>* ret = _head;
-    _head = _head->_next;
+    _head = _head->next;
 
     return ret;
 }
@@ -82,7 +78,7 @@ PoolNode<T>* PoolManager<T>::alloc_one() {
 template<typename T>
 void PoolManager<T>::free_one(PoolNode<T>* node) {
     // add this one as head
-    node->_next = _head;
+    node->next = _head;
     _head = node;
 
     --_size;
@@ -91,7 +87,7 @@ void PoolManager<T>::free_one(PoolNode<T>* node) {
 template<typename T>
 void PoolManager<T>::link_nodes() {
     for (size_t i = 0; i < _pool_size-1; ++i) {
-        _pool[i]._next = &_pool[i+1];
+        _pool[i].next = &_pool[i+1];
     }
 }
 
