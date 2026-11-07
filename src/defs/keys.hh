@@ -56,14 +56,18 @@ struct Matrix {
 };
 
 const hardware::Pin MATRIX_ROW_PINS[] = {
-    // TODO put pins here
-    {GPIOA, GPIO_PIN_0},
+    {GPIOA, GPIO_PIN_15},
+    {GPIOC, GPIO_PIN_10},
+    {GPIOC, GPIO_PIN_11},
 };
 constexpr uint8_t MATRIX_ROWS = sizeof(MATRIX_ROW_PINS) / sizeof(hardware::Pin);
 
 const hardware::Pin MATRIX_COL_PINS[] = {
     // TODO put pins here
-    {GPIOA, GPIO_PIN_0},
+    {GPIOD, GPIO_PIN_2},
+    {GPIOB, GPIO_PIN_3},
+    {GPIOB, GPIO_PIN_4},
+    {GPIOB, GPIO_PIN_6},
 };
 constexpr uint8_t MATRIX_COLS = sizeof(MATRIX_COL_PINS) / sizeof(hardware::Pin);
 
