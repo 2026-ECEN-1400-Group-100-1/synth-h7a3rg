@@ -23,7 +23,7 @@ private:
     bool _octave_up_prev = false;
     bool _octave_down_prev = false;
 
-    uint8_t _curr_octave = 4;
+    uint8_t _curr_octave = DEFAULT_OCTAVE;
 
     // timeout of 1/6 of a second
     uint16_t _update_threshold = 10;

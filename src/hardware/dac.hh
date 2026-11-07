@@ -17,6 +17,7 @@ public:
         HAL_DAC_Stop(_handle, _channel);
     }
 
+    [[nodiscard]]
     uint32_t read() const {
         return HAL_DAC_GetValue(_handle, _channel);
     }

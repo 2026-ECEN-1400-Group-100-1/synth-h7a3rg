@@ -3,7 +3,8 @@
 #include "notes.h"
 #include "hardware/pin.hh"
 
-#define NUM_OCTAVES 7
+#define NUM_OCTAVES 5
+#define DEFAULT_OCTAVE 2
 #define NUM_KEYS 12
 
 /// @brief Note definitions for the keyboard
