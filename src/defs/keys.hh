@@ -42,8 +42,8 @@ struct OctaveKeys {
 
 /// @brief The hardware pins for the octave keys
 const OctaveKeys OCTAVE_KEYS = {
+    {GPIOA, GPIO_PIN_10},
     {GPIOA, GPIO_PIN_9},
-    {GPIOA, GPIO_PIN_8},
 };
 
 /// @brief Struct to contain matrix definitions, such as size and pinout
