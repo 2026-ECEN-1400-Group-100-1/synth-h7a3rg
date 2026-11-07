@@ -4,18 +4,29 @@
 #include "stm32h7xx_hal.h"
 
 #include "synth/sintab.h"
-#include "defs/keys.h"
 
 #include "hardware/dac.hh"
 
+#include "input/interrupt.hh"
+#include "input/keys.hh"
+#include "input/matrix.hh"
+#include "input/octave.hh"
 #include "synth/interrupt.hh"
+
+static input::InputTimer input_tim(&htim2);
+static input::OctaveHandler octave_handle;
+static input::KeyHandler key_handle(octave_handle);
+
+static bool MATRIX_BUF[MATRIX_ROWS][MATRIX_COLS];
+static input::MatrixHandler matrix_handle(
+    MATRIX_KEYS, reinterpret_cast<bool**>(&MATRIX_BUF[0][0]), MATRIX_ROWS, MATRIX_COLS);
 
 /// DAC interrupt frequency is 28kHz
 #define DAC_INTERRUPT_FREQ 28000
 
 static hardware::DAC dac2(&hdac2, DAC_CHANNEL_1, DAC_ALIGN_12B_R);
 
-static synth::SynthTimer synth_tim(&htim1, dac2, DAC_INTERRUPT_FREQ);
+static synth::SynthTimer synth_tim(&htim1, dac2, DAC_INTERRUPT_FREQ, key_handle);
 
 void pmain() {
     // generate sin table
@@ -23,12 +34,16 @@ void pmain() {
 
     dac2.start();
 
+    // input_tim.register_handler(&octave_handle);
+    input_tim.register_handler(&key_handle);
+    // input_tim.register_handler(&matrix_handle);
+    input_tim.start();
+
     synth_tim.start();
 
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
 
     for (;;) {
-        update_keys();
-        update_octave_from_keys();
+        __NOP();
     }
 }
