@@ -60,6 +60,8 @@ extern TIM_HandleTypeDef htim2;
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define LED2_Pin GPIO_PIN_2
+#define LED2_GPIO_Port GPIOA
 #define KEY12_IN_Pin GPIO_PIN_3
 #define KEY12_IN_GPIO_Port GPIOA
 #define KEY2_IN_Pin GPIO_PIN_4
@@ -84,6 +86,26 @@ extern TIM_HandleTypeDef htim2;
 #define KEY3_IN_GPIO_Port GPIOC
 #define KEY1_IN_Pin GPIO_PIN_8
 #define KEY1_IN_GPIO_Port GPIOA
+#define OCT_DOWN_Pin GPIO_PIN_9
+#define OCT_DOWN_GPIO_Port GPIOA
+#define OCT_UP_Pin GPIO_PIN_10
+#define OCT_UP_GPIO_Port GPIOA
+#define ROW1_Pin GPIO_PIN_15
+#define ROW1_GPIO_Port GPIOA
+#define ROW2_Pin GPIO_PIN_10
+#define ROW2_GPIO_Port GPIOC
+#define ROW3_Pin GPIO_PIN_11
+#define ROW3_GPIO_Port GPIOC
+#define COL1_Pin GPIO_PIN_2
+#define COL1_GPIO_Port GPIOD
+#define COL2_Pin GPIO_PIN_3
+#define COL2_GPIO_Port GPIOB
+#define COL3_Pin GPIO_PIN_4
+#define COL3_GPIO_Port GPIOB
+#define COL4_Pin GPIO_PIN_5
+#define COL4_GPIO_Port GPIOB
+#define COL5_Pin GPIO_PIN_6
+#define COL5_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 
