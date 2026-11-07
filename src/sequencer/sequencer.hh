@@ -1,0 +1,38 @@
+#pragma once
+
+#include "hardware/timer.hh"
+
+#include "utils/pool.hh"
+#include "defs/keys.hh"
+
+#define NUM_TRACKS 5
+
+namespace sequencer {
+
+// Linked list node, uses next pointer from PoolNode
+struct SequenceNode {
+    bool key_states[NUM_KEYS];
+
+    uint32_t start_tick;
+    uint16_t length;
+};
+
+class Sequencer final : public hardware::Timer {
+public:
+    Sequencer(TIM_HandleTypeDef* tim, utils::PoolManager<SequenceNode>& pool_man)
+        : Timer(tim), _pool_man(pool_man), _track_heads() {}
+
+protected:
+    void callback() override;
+
+private:
+    void loop();
+
+    utils::PoolManager<SequenceNode>& _pool_man;
+
+    utils::PoolNode<SequenceNode>* _track_heads[NUM_TRACKS];
+
+    uint32_t _tick = 0;
+};
+
+} // namespace sequencer
