@@ -8,7 +8,7 @@ namespace input {
 
 class MatrixHandler final : public InputHandler {
 public:
-    MatrixHandler(const Matrix& matrix, bool** matrix_buf, uint8_t rows, uint8_t cols)
+    MatrixHandler(const Matrix& matrix, bool* matrix_buf, uint8_t rows, uint8_t cols)
         : _matrix(matrix), _matrix_buf(matrix_buf), _rows(rows), _cols(cols)
         { init_pins(); }
 
@@ -25,9 +25,14 @@ private:
     /// @brief Sets all the pins to the correct initial value
     void init_pins() const;
 
+    /// @brief Get a reference to the matrix buffer value at (x,y)
+    /// @note No bounds check, use get_state for checked
+    [[nodiscard]]
+    bool& buf_at(uint8_t x, uint8_t y) const { return _matrix_buf[x * _rows + y]; }
+
     const Matrix& _matrix;
 
-    bool** _matrix_buf;
+    bool* _matrix_buf;
     uint8_t _rows;
     uint8_t _cols;
 

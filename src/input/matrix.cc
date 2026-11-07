@@ -12,7 +12,7 @@ void MatrixHandler::update(uint32_t cycles) {
 
         for (uint8_t y = 0; y < _cols; ++y) {
             // invert due to pullup
-            _matrix_buf[x][y] = !_matrix.Cols[y].read();
+            buf_at(x,y) = !_matrix.Cols[y].read();
         }
 
         // set back HIGH
@@ -25,7 +25,7 @@ bool MatrixHandler::get_state(uint8_t x, uint8_t y) const {
     if (x >= _rows || y >= _cols)
         return false;
 
-    return _matrix_buf[x][y];
+    return buf_at(x, y);
 }
 
 bool MatrixHandler::should_update(uint32_t cycles) const {
