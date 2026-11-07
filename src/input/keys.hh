@@ -17,7 +17,7 @@ public:
 
     /// @brief Gets the frequency that the note should be playing (0 if none)
     [[nodiscard]]
-    uint8_t key_freq(uint8_t key_num) const;
+    uint16_t key_freq(uint8_t key_num) const;
 
 protected:
     void update(uint32_t cycles) override;

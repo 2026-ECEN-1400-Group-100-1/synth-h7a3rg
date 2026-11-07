@@ -9,7 +9,7 @@ void KeyHandler::update(uint32_t cycles) {
     }
 }
 
-uint8_t KeyHandler::key_freq(uint8_t key_num) const {
+uint16_t KeyHandler::key_freq(uint8_t key_num) const {
     if (!key_state(key_num))
         return 0;
 
