@@ -63,10 +63,10 @@ const hardware::Pin MATRIX_ROW_PINS[] = {
 constexpr uint8_t MATRIX_ROWS = sizeof(MATRIX_ROW_PINS) / sizeof(hardware::Pin);
 
 const hardware::Pin MATRIX_COL_PINS[] = {
-    // TODO put pins here
     {GPIOD, GPIO_PIN_2},
     {GPIOB, GPIO_PIN_3},
     {GPIOB, GPIO_PIN_4},
+    {GPIOB, GPIO_PIN_5},
     {GPIOB, GPIO_PIN_6},
 };
 constexpr uint8_t MATRIX_COLS = sizeof(MATRIX_COL_PINS) / sizeof(hardware::Pin);
