@@ -11,10 +11,10 @@ struct Pin {
     [[nodiscard]]
     bool read() const;
 
-    void write(GPIO_PinState value);
-    void write(bool value);
+    void write(GPIO_PinState value) const;
+    void write(bool value) const;
 
-    void toggle();
+    void toggle() const;
 };
 
 } // namespace hardware
