@@ -20,7 +20,7 @@ struct SequenceNode {
 class Sequencer final : public hardware::Timer {
 public:
     Sequencer(TIM_HandleTypeDef* tim, utils::PoolManager<SequenceNode>& pool_man)
-        : Timer(tim), _pool_man(pool_man), _track_heads() {}
+        : Timer(tim), _pool_man(pool_man), _track_heads(), _track_tails(), _track_currs() {}
 
 protected:
     void callback() override;
@@ -31,8 +31,11 @@ private:
     utils::PoolManager<SequenceNode>& _pool_man;
 
     utils::PoolNode<SequenceNode>* _track_heads[NUM_TRACKS];
+    utils::PoolNode<SequenceNode>* _track_tails[NUM_TRACKS];
 
-    uint32_t _tick = 0;
+    utils::PoolNode<SequenceNode>* _track_currs[NUM_TRACKS];
+
+    volatile uint32_t _tick = 0;
 };
 
 } // namespace sequencer
