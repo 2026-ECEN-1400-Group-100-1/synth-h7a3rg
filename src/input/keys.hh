@@ -32,7 +32,7 @@ private:
 
 class KeysChangedEvent final : public utils::Event<KeysChangedEvent> {
 public:
-    explicit KeysChangedEvent(const KeyHandler& event_caller) : Event(), key_handler(event_caller) {}
+    explicit KeysChangedEvent(const KeyHandler& event_caller) : Event(*this), key_handler(event_caller) {}
 
     const KeyHandler& key_handler;
 };

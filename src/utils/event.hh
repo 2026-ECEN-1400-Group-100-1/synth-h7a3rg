@@ -18,20 +18,24 @@ public:
     virtual ~EventSubscriber() = default;
 
 protected:
-    virtual void handle_event(const Event<T>& event) = 0;
+    virtual void handle_event(Event<T>& event) = 0;
 };
 
 template <typename T>
 class Event {
 public:
-    Event() = default;
+    explicit Event(T& wrapped) : _wrap(wrapped) {}
 
     static bool subscribe(EventSubscriber<T>& subscriber);
     void raise();
 
+    T& args() { return _wrap; }
+
 private:
     static inline EventSubscriber<T>* _subscribers[MAX_EVENT_SUBSCRIBERS] = {};
     static inline uint8_t _num_subscribers = 0;
+
+    T& _wrap;
 };
 
 template<typename T>

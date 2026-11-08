@@ -14,7 +14,7 @@ void Sequencer::loop() {
     }
 }
 
-void Sequencer::handle_event(const utils::Event<input::KeysChangedEvent>& event) {
+void Sequencer::handle_event(utils::Event<input::KeysChangedEvent>& event) {
     HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
 }
 

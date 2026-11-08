@@ -28,7 +28,7 @@ public:
 protected:
     void callback() override;
 
-    void handle_event(const utils::Event<input::KeysChangedEvent>& event) override;
+    void handle_event(utils::Event<input::KeysChangedEvent>& event) override;
 
 private:
     void loop();
