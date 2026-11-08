@@ -4,6 +4,8 @@
 #include "octave.hh"
 #include "defs/keys.hh"
 
+#include "utils/event.hh"
+
 namespace input {
 
 class KeyHandler final : public InputHandler {
@@ -26,6 +28,13 @@ private:
     bool _key_states[NUM_KEYS];
 
     const OctaveHandler& _octave_ctrl;
+};
+
+class KeysChangedEvent final : public utils::Event<KeysChangedEvent> {
+public:
+    explicit KeysChangedEvent(const KeyHandler& event_caller) : Event(), key_handler(event_caller) {}
+
+    const KeyHandler& key_handler;
 };
 
 } // namespace input
