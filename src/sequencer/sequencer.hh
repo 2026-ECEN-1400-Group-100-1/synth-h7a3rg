@@ -4,6 +4,9 @@
 
 #include "utils/pool.hh"
 #include "defs/keys.hh"
+#include "input/keys.hh"
+
+#include "utils/event.hh"
 
 #define NUM_TRACKS 5
 
@@ -17,13 +20,15 @@ struct SequenceNode {
     uint16_t length;
 };
 
-class Sequencer final : public hardware::Timer {
+class Sequencer final : public hardware::Timer, public utils::EventSubscriber<input::KeysChangedEvent> {
 public:
     Sequencer(TIM_HandleTypeDef* tim, utils::PoolManager<SequenceNode>& pool_man)
         : Timer(tim), _pool_man(pool_man), _track_heads(), _track_tails(), _track_currs() {}
 
 protected:
     void callback() override;
+
+    void handle_event(const utils::Event<input::KeysChangedEvent>& event) override;
 
 private:
     void loop();
