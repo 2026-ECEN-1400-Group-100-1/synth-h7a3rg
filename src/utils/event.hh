@@ -1,0 +1,53 @@
+#pragma once
+
+#include <cstdint>
+
+#define MAX_EVENT_SUBSCRIBERS 16
+
+namespace utils {
+
+template <typename T> class Event;
+
+template <typename T>
+class EventSubscriber {
+    friend class Event<T>;
+
+public:
+    EventSubscriber() { Event<T>::subscribe(*this); }
+
+    virtual ~EventSubscriber() = default;
+
+protected:
+    virtual void handle_event(const Event<T>& event) = 0;
+};
+
+template <typename T>
+class Event {
+public:
+    Event() = default;
+
+    static bool subscribe(EventSubscriber<T>& subscriber);
+    void raise();
+
+private:
+    static inline EventSubscriber<T>* _subscribers[MAX_EVENT_SUBSCRIBERS] = {};
+    static inline uint8_t _num_subscribers = 0;
+};
+
+template<typename T>
+bool Event<T>::subscribe(EventSubscriber<T>& subscriber) {
+    if (_num_subscribers >= MAX_EVENT_SUBSCRIBERS)
+        return false;
+
+    _subscribers[_num_subscribers++] = &subscriber;
+    return true;
+}
+
+template<typename T>
+void Event<T>::raise() {
+    for (uint8_t i = 0; i < _num_subscribers; ++i) {
+        _subscribers[i]->handle_event(*this);
+    }
+}
+
+} // namespace utils
