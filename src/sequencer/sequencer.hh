@@ -31,8 +31,8 @@ public:
 protected:
     void callback() override;
 
-    void handle_event(utils::Event<input::KeysChangedEvent>& event) override;
-    void handle_event(utils::Event<input::MatrixButtonPressedEvent>& event) override;
+    void handle_event(input::KeysChangedEvent& event) override;
+    void handle_event(input::MatrixButtonPressedEvent& event) override;
 
 private:
     void loop();

@@ -1,7 +1,5 @@
 #pragma once
 
-#include <cstdint>
-
 #define MAX_EVENT_SUBSCRIBERS 16
 
 namespace utils {
@@ -18,7 +16,7 @@ public:
     virtual ~EventSubscriber() = default;
 
 protected:
-    virtual void handle_event(Event<T>& event) = 0;
+    virtual void handle_event(T& event) = 0;
 };
 
 template <typename T>
@@ -50,7 +48,7 @@ bool Event<T>::subscribe(EventSubscriber<T>& subscriber) {
 template<typename T>
 void Event<T>::raise() {
     for (uint8_t i = 0; i < _num_subscribers; ++i) {
-        _subscribers[i]->handle_event(*this);
+        _subscribers[i]->handle_event(_wrap);
     }
 }
 

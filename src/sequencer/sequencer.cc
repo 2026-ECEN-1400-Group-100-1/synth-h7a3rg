@@ -14,13 +14,13 @@ void Sequencer::loop() {
     }
 }
 
-void Sequencer::handle_event(utils::Event<input::KeysChangedEvent>& event) {
+void Sequencer::handle_event(input::KeysChangedEvent& event) {
 
 }
 
-void Sequencer::handle_event(utils::Event<input::MatrixButtonPressedEvent>& event) {
+void Sequencer::handle_event(input::MatrixButtonPressedEvent& event) {
     // giant fucking case switch :(
-    switch (event.args().button_pressed.button_type) {
+    switch (event.button_pressed.button_type) {
         case input::Start:
             on_start();
             break;
