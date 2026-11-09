@@ -19,13 +19,25 @@ void Sequencer::handle_event(utils::Event<input::KeysChangedEvent>& event) {
 }
 
 void Sequencer::handle_event(utils::Event<input::MatrixButtonPressedEvent>& event) {
-    if (event.args().button_pressed.button_type == input::Start) {
-        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
-    } else if (event.args().button_pressed.button_type == input::Stop) {
-        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);
-    } else {
-        HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
+    // giant fucking case switch :(
+    switch (event.args().button_pressed.button_type) {
+        case input::Start:
+            on_start();
+            break;
+        case input::Stop:
+            on_stop();
+            break;
+        default: return;
     }
 }
+
+void Sequencer::on_start() {
+
+}
+
+void Sequencer::on_stop() {
+
+}
+
 
 } // namespace sequencer

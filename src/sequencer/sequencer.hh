@@ -37,6 +37,9 @@ protected:
 private:
     void loop();
 
+    void on_start();
+    void on_stop();
+
     utils::PoolManager<SequenceNode>& _pool_man;
 
     utils::PoolNode<SequenceNode>* _track_heads[NUM_TRACKS];
