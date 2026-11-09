@@ -8,6 +8,9 @@ namespace synth {
 void SynthTimer::callback() {
     _dac_accumulator += 1.0 / _interrupt_frequency;
 
+    if (_dac_accumulator > 1)
+        _dac_accumulator -= 1;
+
     double dac_out = 0;
     uint8_t num_keys = 0;
 
