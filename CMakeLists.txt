@@ -46,6 +46,7 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
         src/pmain.cc
+        src/defs/matrix.cc
         src/synth/sintab.c
         src/hardware/pin.cc
         src/hardware/timer.cc

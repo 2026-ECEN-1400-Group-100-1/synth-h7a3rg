@@ -5,6 +5,7 @@
 #include "utils/pool.hh"
 #include "defs/keys.hh"
 #include "input/keys.hh"
+#include "input/matrix.hh"
 
 #include "utils/event.hh"
 
@@ -20,7 +21,9 @@ struct SequenceNode {
     uint16_t length;
 };
 
-class Sequencer final : public hardware::Timer, public utils::EventSubscriber<input::KeysChangedEvent> {
+class Sequencer final : public hardware::Timer,
+    public utils::EventSubscriber<input::KeysChangedEvent>,
+    public utils::EventSubscriber<input::MatrixButtonPressedEvent> {
 public:
     Sequencer(TIM_HandleTypeDef* tim, utils::PoolManager<SequenceNode>& pool_man)
         : Timer(tim), _pool_man(pool_man), _track_heads(), _track_tails(), _track_currs() {}
@@ -29,6 +32,7 @@ protected:
     void callback() override;
 
     void handle_event(utils::Event<input::KeysChangedEvent>& event) override;
+    void handle_event(utils::Event<input::MatrixButtonPressedEvent>& event) override;
 
 private:
     void loop();

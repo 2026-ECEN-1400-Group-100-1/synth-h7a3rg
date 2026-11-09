@@ -15,7 +15,17 @@ void Sequencer::loop() {
 }
 
 void Sequencer::handle_event(utils::Event<input::KeysChangedEvent>& event) {
-    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
+
+}
+
+void Sequencer::handle_event(utils::Event<input::MatrixButtonPressedEvent>& event) {
+    if (event.args().button_pressed.button_type == input::Start) {
+        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
+    } else if (event.args().button_pressed.button_type == input::Stop) {
+        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);
+    } else {
+        HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
+    }
 }
 
 } // namespace sequencer

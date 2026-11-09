@@ -14,11 +14,12 @@
 #include "sequencer/sequencer.hh"
 #include "synth/interrupt.hh"
 
+#include "defs/matrix.hh"
+
 static input::InputTimer input_tim(&htim2);
 static input::OctaveHandler octave_handle;
 static input::KeyHandler key_handle(octave_handle);
 
-static bool MATRIX_BUF[MATRIX_ROWS*MATRIX_COLS];
 static input::MatrixHandler matrix_handle(
     MATRIX_KEYS, MATRIX_BUF, MATRIX_ROWS, MATRIX_COLS);
 
