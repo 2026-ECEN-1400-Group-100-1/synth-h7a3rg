@@ -40,7 +40,6 @@ struct SequenceNode {
             // add frequency to the array
             frequencies[frequency_count++] = other.frequencies[i];
         }
-        frequency_count = std::max(frequency_count + other.frequency_count, MAX_NOTES_PER_NODE);
     }
 };
 
