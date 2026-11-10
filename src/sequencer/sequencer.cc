@@ -101,33 +101,43 @@ void Sequencer::sub_beat_or_cancel() {
     decrement_tracks();
 }
 
+void Sequencer::commit_staged() {
+    if (_curr_loop == 0) return;
+
+    // get current node
+    utils::PoolNode<SequenceNode>*& curr_node = _tracks[_curr_loop-1].curr;
+    if (curr_node == nullptr) return;
+
+    // set its data to the staged
+    curr_node->data.copy_data(_staged_node);
+
+    // reset staged to zero (just leave and ignore junk)
+    _staged_node.frequency_count = 0;
+}
+
 void Sequencer::handle_event(input::KeysChangedEvent& event) {
     // return if we don't have a selected loop
     if (_curr_loop == 0) return;
 
-    // get our node
-    utils::PoolNode<SequenceNode>*& curr_node = _tracks[_curr_loop].curr;
-    if (curr_node == nullptr) return; // should never happen but segfaults are bad
-
-    // update current loop's state
+    // update staged node state
     for (uint8_t i = 0; i < NUM_KEYS; ++i) {
         uint16_t freq = event.key_handler.key_freq(i);
         if (freq == 0) continue;
 
         // quit if there isn't space for the note
-        if (curr_node->data.frequency_count >= MAX_NOTES_PER_NODE) return;
+        if (_staged_node.frequency_count >= MAX_NOTES_PER_NODE) return;
 
         // check if frequency is already in the list
         bool found = false;
-        for (uint8_t j = 0; j < curr_node->data.frequency_count; ++j) {
-            if (curr_node->data.frequencies[j] == freq) {
+        for (uint8_t j = 0; j < _staged_node.frequency_count; ++j) {
+            if (_staged_node.frequencies[j] == freq) {
                 found = true;
                 break;
             }
         }
         if (found) continue;
 
-        curr_node->data.frequencies[curr_node->data.frequency_count++] = freq;
+        _staged_node.frequencies[_staged_node.frequency_count++] = freq;
     }
 }
 

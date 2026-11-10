@@ -21,6 +21,12 @@ struct SequenceNode {
 
     uint16_t frequencies[MAX_NOTES_PER_NODE];
     uint8_t frequency_count;
+
+    void copy_data(const SequenceNode& other) {
+        frequency_count = other.frequency_count;
+        for (uint8_t i = 0; i < frequency_count; ++i)
+            frequencies[i] = other.frequencies[i];
+    }
 };
 
 class Sequencer final : public hardware::Timer,
@@ -28,7 +34,7 @@ class Sequencer final : public hardware::Timer,
     public utils::EventSubscriber<input::MatrixButtonPressedEvent> {
 public:
     Sequencer(TIM_HandleTypeDef* tim, utils::PoolManager<SequenceNode>& pool_man)
-        : Timer(tim), _pool_man(pool_man), _tracks() {
+        : Timer(tim), _pool_man(pool_man), _tracks(), _staged_node() {
 
         // add an initial trackset at pos 0, and set current nodes to it
         add_trackset();
@@ -62,6 +68,9 @@ private:
     /// @brief Go back a beat, unless it's already on the first beat
     void sub_beat_or_cancel();
 
+    /// @brief Commit the staged node to the current track
+    void commit_staged();
+
     void on_start();
     void on_stop();
 
@@ -79,6 +88,8 @@ private:
         utils::PoolNode<SequenceNode>* tail;
         utils::PoolNode<SequenceNode>* curr;
     } _tracks[NUM_TRACKS];
+
+    SequenceNode _staged_node;
 
     uint8_t _curr_loop = 0;
 
