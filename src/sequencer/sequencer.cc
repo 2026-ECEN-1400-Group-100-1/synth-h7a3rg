@@ -107,8 +107,8 @@ void Sequencer::commit_staged() {
     utils::PoolNode<SequenceNode>*& curr_node = _tracks[_curr_loop-1].curr;
     if (curr_node == nullptr) return;
 
-    // set its data to the staged
-    curr_node->data.copy_data(_staged_node);
+    // append its data to the staged
+    curr_node->data.append_data(_staged_node);
 
     // reset staged to zero (just leave and ignore junk)
     _staged_node.frequency_count = 0;
