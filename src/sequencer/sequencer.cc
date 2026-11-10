@@ -116,6 +116,16 @@ void Sequencer::handle_event(input::KeysChangedEvent& event) {
         // quit if there isn't space for the note
         if (curr_node->data.frequency_count >= MAX_NOTES_PER_NODE) return;
 
+        // check if frequency is already in the list
+        bool found = false;
+        for (uint8_t j = 0; j < curr_node->data.frequency_count; ++j) {
+            if (curr_node->data.frequencies[j] == freq) {
+                found = true;
+                break;
+            }
+        }
+        if (found) continue;
+
         curr_node->data.frequencies[curr_node->data.frequency_count++] = freq;
     }
 }

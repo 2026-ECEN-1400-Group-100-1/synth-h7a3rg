@@ -28,7 +28,12 @@ class Sequencer final : public hardware::Timer,
     public utils::EventSubscriber<input::MatrixButtonPressedEvent> {
 public:
     Sequencer(TIM_HandleTypeDef* tim, utils::PoolManager<SequenceNode>& pool_man)
-        : Timer(tim), _pool_man(pool_man), _tracks() { add_trackset(); } // add an initial trackset at pos 0
+        : Timer(tim), _pool_man(pool_man), _tracks() {
+
+        // add an initial trackset at pos 0, and set current nodes to it
+        add_trackset();
+        set_first();
+    }
 
     void set_tempo(uint16_t tempo) { _tempo = tempo; }
 
