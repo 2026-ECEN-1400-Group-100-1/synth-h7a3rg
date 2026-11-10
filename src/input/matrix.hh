@@ -26,13 +26,12 @@ enum MatrixButtonType {
 struct MatrixButton {
     MatrixButton() = default;
     explicit MatrixButton(MatrixButtonType type) : button_type(type) {}
+    MatrixButton(MatrixButtonType type, uint8_t loop_num) : button_type(type), loop_number(loop_num) {}
 
     MatrixButtonType button_type = None;
     bool state = false;
-};
 
-struct MatrixLoopSelectButton : MatrixButton {
-    MatrixButtonType button_type = SelectLoop;
+    // don't like this but whatever
     uint8_t loop_number = 0;
 };
 

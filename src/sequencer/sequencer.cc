@@ -159,10 +159,7 @@ void Sequencer::handle_event(input::MatrixButtonPressedEvent& event) {
         case input::Last:
             return on_last();
         case input::SelectLoop: {
-            // this is kind of yucky but I don't care enough to fix it
-            const input::MatrixLoopSelectButton& button =
-                static_cast<const input::MatrixLoopSelectButton&>(event.button_pressed);
-            on_select_loop(button.loop_number);
+            on_select_loop(event.button_pressed.loop_number);
             return;
         }
         default: return; // so clang-tidy will shut up
