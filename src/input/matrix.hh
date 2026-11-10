@@ -9,8 +9,16 @@ namespace input {
 
 enum MatrixButtonType {
     None = 0,
+
     Start,
     Stop,
+
+    First,
+    Next,
+    Prev,
+    Last,
+
+    SelectLoop,
 };
 
 struct MatrixButton {
@@ -19,6 +27,11 @@ struct MatrixButton {
 
     MatrixButtonType button_type = None;
     bool state = false;
+};
+
+struct MatrixLoopSelectButton : MatrixButton {
+    MatrixButtonType button_type = SelectLoop;
+    uint8_t loop_number = 0;
 };
 
 class MatrixHandler final : public InputHandler {
