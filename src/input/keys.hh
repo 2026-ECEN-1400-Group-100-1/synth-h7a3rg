@@ -6,9 +6,14 @@
 
 #include "utils/event.hh"
 
+// forward declare because of some stupid bullshit probably
+namespace synth {
+class SynthGetFrequenciesEvent;
+} // namespace synth
+
 namespace input {
 
-class KeyHandler final : public InputHandler {
+class KeyHandler final : public InputHandler, public utils::EventSubscriber<synth::SynthGetFrequenciesEvent> {
 public:
     explicit KeyHandler(const OctaveHandler& octave_ctrl)
         : _key_states(), _octave_ctrl(octave_ctrl) {}
@@ -23,6 +28,8 @@ public:
 
 protected:
     void update(uint32_t cycles) override;
+
+    void handle_event(synth::SynthGetFrequenciesEvent& event) override;
 
 private:
     bool _key_states[NUM_KEYS];

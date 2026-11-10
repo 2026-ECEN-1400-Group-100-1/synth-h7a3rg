@@ -6,6 +6,7 @@
 #include "defs/keys.hh"
 #include "input/keys.hh"
 #include "input/matrix.hh"
+#include "synth/interrupt.hh"
 
 #include "utils/event.hh"
 
@@ -27,7 +28,8 @@ struct SequenceNode {
 
 class Sequencer final : public hardware::Timer,
     public utils::EventSubscriber<input::KeysChangedEvent>,
-    public utils::EventSubscriber<input::MatrixButtonPressedEvent> {
+    public utils::EventSubscriber<input::MatrixButtonPressedEvent>,
+    public utils::EventSubscriber<synth::SynthGetFrequenciesEvent> {
 public:
     Sequencer(TIM_HandleTypeDef* tim, utils::PoolManager<SequenceNode>& pool_man)
         : Timer(tim), _pool_man(pool_man), _tracks(), _staged_node() {
@@ -44,6 +46,7 @@ protected:
 
     void handle_event(input::KeysChangedEvent& event) override;
     void handle_event(input::MatrixButtonPressedEvent& event) override;
+    void handle_event(synth::SynthGetFrequenciesEvent& event) override;
 
 private:
     /// @brief Move the curr* for every track up by one

@@ -1,5 +1,7 @@
 #include "keys.hh"
 
+#include "synth/interrupt.hh"
+
 namespace input {
 
 void KeyHandler::update(uint32_t cycles) {
@@ -17,6 +19,15 @@ void KeyHandler::update(uint32_t cycles) {
 
     KeysChangedEvent event(*this);
     event.raise();
+}
+
+void KeyHandler::handle_event(synth::SynthGetFrequenciesEvent& event) {
+    // add current keys
+    for (uint8_t i = 0; i < NUM_KEYS; ++i) {
+        uint16_t freq = key_freq(i);
+        if (freq != 0)
+            event.add_frequency(freq);
+    }
 }
 
 uint16_t KeyHandler::key_freq(uint8_t key_num) const {

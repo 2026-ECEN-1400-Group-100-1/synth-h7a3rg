@@ -185,6 +185,10 @@ void Sequencer::handle_event(input::MatrixButtonPressedEvent& event) {
     }
 }
 
+void Sequencer::handle_event(synth::SynthGetFrequenciesEvent& event) {
+    // just add current
+}
+
 void Sequencer::on_start() {
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
     _run = true;
