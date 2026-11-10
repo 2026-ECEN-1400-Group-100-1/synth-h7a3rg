@@ -84,6 +84,7 @@ void PoolManager<T>::link_nodes() {
     for (size_t i = 0; i < _pool_size-1; ++i) {
         _pool[i].next = &_pool[i+1];
     }
+    _head = &_pool[0];
 }
 
 } // namespace utils
