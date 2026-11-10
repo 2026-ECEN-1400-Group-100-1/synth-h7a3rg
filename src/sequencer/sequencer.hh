@@ -24,6 +24,9 @@ struct SequenceNode {
     uint8_t frequency_count;
 
     void append_data(const SequenceNode& other);
+    void add_to_synth_event(synth::SynthGetFrequenciesEvent& event) const;
+
+    void clear() { frequency_count = 0; }
 };
 
 class Sequencer final : public hardware::Timer,
@@ -85,9 +88,11 @@ private:
     utils::PoolManager<SequenceNode>& _pool_man;
 
     struct {
-        utils::PoolNode<SequenceNode>* head;
-        utils::PoolNode<SequenceNode>* tail;
-        utils::PoolNode<SequenceNode>* curr;
+        utils::PoolNode<SequenceNode>* head = nullptr;
+        utils::PoolNode<SequenceNode>* tail = nullptr;
+        utils::PoolNode<SequenceNode>* curr = nullptr;
+
+        bool running = false;
     } _tracks[NUM_TRACKS];
 
     SequenceNode _staged_node;

@@ -22,6 +22,12 @@ void SequenceNode::append_data(const SequenceNode& other) {
     }
 }
 
+void SequenceNode::add_to_synth_event(synth::SynthGetFrequenciesEvent& event) const {
+    for (uint8_t i = 0; i < frequency_count; ++i) {
+        if (!event.add_frequency(frequencies[i])) return;
+    }
+}
+
 void Sequencer::callback() {
     // exit if we're paused
     if (!_run) return;
@@ -57,12 +63,12 @@ void Sequencer::add_trackset() {
     for (uint8_t i = 0; i < NUM_TRACKS; ++i) {
         utils::PoolNode<SequenceNode>*& tail = _tracks[i].tail;
         utils::PoolNode<SequenceNode>* new_node = _pool_man.alloc_one();
+        if (new_node == nullptr) return; // won't practically happen (>16k nodes in pool)
 
         // zero out all the data on the new node
         new_node->next = nullptr;
         new_node->data.prev = nullptr;
-        for (uint8_t j = 0; j < MAX_NOTES_PER_NODE; ++j)
-            new_node->data.frequencies[j] = 0;
+        // can just leave junk in frequencies
         new_node->data.frequency_count = 0;
 
         if (tail == nullptr) {
@@ -127,11 +133,10 @@ void Sequencer::commit_staged() {
     utils::PoolNode<SequenceNode>*& curr_node = _tracks[_curr_loop-1].curr;
     if (curr_node == nullptr) return;
 
+    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
+
     // append its data to the staged
     curr_node->data.append_data(_staged_node);
-
-    // reset staged to zero (just leave and ignore junk)
-    _staged_node.frequency_count = 0;
 }
 
 void Sequencer::handle_event(input::KeysChangedEvent& event) {
@@ -177,50 +182,64 @@ void Sequencer::handle_event(input::MatrixButtonPressedEvent& event) {
             return on_prev();
         case input::Last:
             return on_last();
-        case input::SelectLoop: {
-            on_select_loop(event.button_pressed.loop_number);
-            return;
-        }
+        case input::SelectLoop:
+            return on_select_loop(event.button_pressed.loop_number);
         default: return; // so clang-tidy will shut up
     }
 }
 
 void Sequencer::handle_event(synth::SynthGetFrequenciesEvent& event) {
-    // just add current
+    // add from staged node
+    if (_curr_loop != 0)
+        _staged_node.add_to_synth_event(event);
 }
 
 void Sequencer::on_start() {
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
+    if (_run) return; // already running
     _run = true;
+    _curr_loop = 0;
+    _staged_node.clear();
 }
 
 void Sequencer::on_stop() {
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);
+    if (!_run) return; // already stopped
     _run = false;
+    _curr_loop = 0;
+    _staged_node.clear();
 }
 
 void Sequencer::on_save() {
     commit_staged();
+    // clear even if it fails
+    _staged_node.clear();
 }
 
 void Sequencer::on_first() {
     set_first();
+    _staged_node.clear();
 }
 
 void Sequencer::on_last() {
     set_last();
+    _staged_node.clear();
 }
 
 void Sequencer::on_next() {
     add_beat_uncapped();
+    _staged_node.clear();
 }
 
 void Sequencer::on_prev() {
     sub_beat_or_cancel();
+    _staged_node.clear();
 }
 
 void Sequencer::on_select_loop(uint8_t loop_num) {
-    _curr_loop = loop_num;
+    // set to pressed button unless that button is already selected
+    _curr_loop = _curr_loop == loop_num ? 0 : loop_num;
+    _staged_node.clear();
 }
 
 } // namespace sequencer

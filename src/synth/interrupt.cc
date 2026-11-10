@@ -28,15 +28,17 @@ void SynthTimer::callback() {
     _dac.write(static_cast<uint16_t>(dac_out));
 }
 
-void SynthGetFrequenciesEvent::add_frequency(uint16_t freq) {
-    if (frequency_count >= MAX_FREQUENCIES) return;
+bool SynthGetFrequenciesEvent::add_frequency(uint16_t freq) {
+    if (frequency_count >= MAX_FREQUENCIES) return false;
 
     // check if it's already in
     for (uint8_t i = 0; i < frequency_count; ++i) {
-        if (frequencies[i] == freq) return;
+        // true feels weird here but it's to check if there's space, not if freq was added
+        if (frequencies[i] == freq) return true;
     }
 
     frequencies[frequency_count++] = freq;
+    return true;
 }
 
 } // namespace synth

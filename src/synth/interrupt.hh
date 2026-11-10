@@ -6,7 +6,7 @@
 
 #include "utils/event.hh"
 
-#define MAX_FREQUENCIES 32
+#define MAX_FREQUENCIES 6
 
 namespace synth {
 
@@ -39,7 +39,7 @@ public:
     uint16_t frequencies[MAX_FREQUENCIES];
     uint8_t frequency_count;
 
-    void add_frequency(uint16_t freq);
+    bool add_frequency(uint16_t freq);
 };
 
 } // namespace synth
