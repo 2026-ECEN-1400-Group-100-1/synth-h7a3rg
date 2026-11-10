@@ -61,16 +61,15 @@ void Sequencer::set_first() {
     _beat = 0;
     for (uint8_t i = 0; i < NUM_TRACKS; ++i) {
         // just set all the curr_nodes to head
-        utils::PoolNode<SequenceNode>*& curr_node = _tracks[i].curr;
-        curr_node = _tracks->head;
+        _tracks[i].curr = _tracks[i].head;
     }
 }
 
 void Sequencer::set_last() {
     _beat = _max_beats;
     for (uint8_t i = 0; i < NUM_TRACKS; ++i) {
-        utils::PoolNode<SequenceNode>*& curr_node = _tracks[i].curr;
-        curr_node = _tracks->tail; // this could probably get fucky but whatever
+        // just set all the curr_nodes to tail
+        _tracks[i].curr = _tracks[i].tail;
     }
 }
 
