@@ -18,9 +18,8 @@ namespace sequencer {
 struct SequenceNode {
     // yucky but whatever
     utils::PoolNode<SequenceNode>* prev;
-    uint32_t end_tick;
 
-    bool frequencies[MAX_NOTES_PER_NODE];
+    uint16_t frequencies[MAX_NOTES_PER_NODE];
     uint8_t frequency_count;
 };
 
@@ -29,7 +28,7 @@ class Sequencer final : public hardware::Timer,
     public utils::EventSubscriber<input::MatrixButtonPressedEvent> {
 public:
     Sequencer(TIM_HandleTypeDef* tim, utils::PoolManager<SequenceNode>& pool_man)
-        : Timer(tim), _pool_man(pool_man), _tracks() {}
+        : Timer(tim), _pool_man(pool_man), _tracks() { add_trackset(); } // add an initial trackset at pos 0
 
     void set_tempo(uint16_t tempo) { _tempo = tempo; }
 
@@ -40,8 +39,10 @@ protected:
     void handle_event(input::MatrixButtonPressedEvent& event) override;
 
 private:
-    void increment_beat();
-    void decrement_beat();
+    void increment_tracks();
+    void decrement_tracks();
+
+    void add_trackset();
 
     void set_first();
     void set_last();
@@ -50,7 +51,7 @@ private:
     void add_beat_looping();
     /// @brief Add a beat, and add to _max_beats if it hits the cap
     void add_beat_uncapped();
-    /// @brief Go back a beat, and loop to the end if it hits 0
+    /// @brief Go back a beat, unless it's already on the first beat
     void sub_beat_or_cancel();
 
     void on_start();
@@ -80,8 +81,6 @@ private:
 
     bool _run = false;
     uint16_t _tempo = 60; // TODO set this
-    /// @note beats per measure, we don't care about lower part
-    uint8_t _time_signature = 4;
 };
 
 } // namespace sequencer

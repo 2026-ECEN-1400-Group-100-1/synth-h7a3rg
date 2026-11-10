@@ -10,70 +10,94 @@ void Sequencer::callback() {
     if (_tick++ < _tempo)
         return;
 
-    // move to next beat
+    // move to next beat with looping
     add_beat_looping();
     _tick = 0;
 }
 
-void Sequencer::increment_beat() {
+void Sequencer::increment_tracks() {
     for (uint8_t i = 0; i < NUM_TRACKS; ++i) {
         utils::PoolNode<SequenceNode>*& curr_node = _tracks[i].curr;
-        if (curr_node == nullptr) continue;
+        if (curr_node == nullptr) continue; // should never happen but segfaults are bad
 
         curr_node = curr_node->next;
     }
 }
 
-void Sequencer::decrement_beat() {
+void Sequencer::decrement_tracks() {
     for (uint8_t i = 0; i < NUM_TRACKS; ++i) {
         utils::PoolNode<SequenceNode>*& curr_node = _tracks[i].curr;
-        if (curr_node == nullptr) continue; // TODO this doesn't go back right if we step off the end of the track
+        if (curr_node == nullptr) continue; // should never happen but segfaults are bad
 
         curr_node = curr_node->data.prev;
     }
 }
 
-void Sequencer::set_first() {
-    _tick = 0;
-    _beat = 0;
-    // TODO not fucking copy paste this a million times
+void Sequencer::add_trackset() {
     for (uint8_t i = 0; i < NUM_TRACKS; ++i) {
+        utils::PoolNode<SequenceNode>*& tail = _tracks[i].tail;
+        utils::PoolNode<SequenceNode>* new_node = _pool_man.alloc_one();
+
+        // zero out all the data on the new node
+        new_node->data.prev = nullptr;
+        for (uint8_t j = 0; j < MAX_NOTES_PER_NODE; ++j)
+            new_node->data.frequencies[j] = 0;
+        new_node->data.frequency_count = 0;
+
+        if (tail == nullptr) {
+            // list is empty, handle heads too
+            _tracks[i].head = new_node;
+        }
+
+        // link and set
+        new_node->data.prev = tail;
+        tail->next = new_node;
+        tail = new_node;
+    }
+}
+
+void Sequencer::set_first() {
+    _beat = 0;
+    for (uint8_t i = 0; i < NUM_TRACKS; ++i) {
+        // just set all the curr_nodes to head
         utils::PoolNode<SequenceNode>*& curr_node = _tracks[i].curr;
         curr_node = _tracks->head;
     }
 }
 
 void Sequencer::set_last() {
-    _tick = 0;
     _beat = _max_beats;
     for (uint8_t i = 0; i < NUM_TRACKS; ++i) {
         utils::PoolNode<SequenceNode>*& curr_node = _tracks[i].curr;
-        curr_node = _tracks->tail; // TODO this gets fucky (like decrement_beat)
+        curr_node = _tracks->tail; // this could probably get fucky but whatever
     }
 }
 
 void Sequencer::add_beat_looping() {
-    if (_beat >= _max_beats) {
+    if (_beat++ >= _max_beats) {
         set_first();
-        return;
+    } else {
+        increment_tracks();
     }
-    increment_beat();
 }
 
 void Sequencer::add_beat_uncapped() {
-    _beat++;
-
-    // increment max beats if we just overflowed
-    if (_beat > _max_beats)
+    // increment max beats if we overflow
+    if (_beat++ >= _max_beats) {
         _max_beats = _beat;
+        add_trackset();
+    }
+
+    // increment only after we've potentially added tracks to increment to
+    increment_tracks();
 }
 
 void Sequencer::sub_beat_or_cancel() {
-    // cancel if we're at zero
-    if (_beat == 0) {
+    if (_beat == 0)
         return;
-    }
-    decrement_beat();
+
+    --_beat;
+    decrement_tracks();
 }
 
 void Sequencer::handle_event(input::KeysChangedEvent& event) {
