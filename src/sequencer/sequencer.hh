@@ -74,6 +74,8 @@ private:
     void on_start();
     void on_stop();
 
+    void on_save();
+
     void on_first();
     void on_next();
     void on_prev();

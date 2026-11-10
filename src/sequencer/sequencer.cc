@@ -148,6 +148,8 @@ void Sequencer::handle_event(input::MatrixButtonPressedEvent& event) {
             return on_start();
         case input::Stop:
             return on_stop();
+        case input::Save:
+            return on_save();
         case input::First:
             return on_first();
         case input::Next:
@@ -175,6 +177,10 @@ void Sequencer::on_start() {
 void Sequencer::on_stop() {
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);
     _run = false;
+}
+
+void Sequencer::on_save() {
+    commit_staged();
 }
 
 void Sequencer::on_first() {

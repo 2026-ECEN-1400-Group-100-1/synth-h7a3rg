@@ -13,6 +13,8 @@ enum MatrixButtonType {
     Start,
     Stop,
 
+    Save,
+
     First,
     Next,
     Prev,
