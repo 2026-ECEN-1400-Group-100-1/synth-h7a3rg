@@ -44,9 +44,12 @@ protected:
     void handle_event(input::MatrixButtonPressedEvent& event) override;
 
 private:
+    /// @brief Move the curr* for every track up by one
     void increment_tracks();
+    /// @brief Move the curr* for every track down by one
     void decrement_tracks();
 
+    /// @brief Adds an empty set of nodes to every track
     void add_trackset();
 
     void set_first();
