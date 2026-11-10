@@ -2,6 +2,26 @@
 
 namespace sequencer {
 
+void SequenceNode::append_data(const SequenceNode& other) {
+    for (uint8_t i = 0; i < other.frequency_count; ++i) {
+        // check if it's already in the list
+        bool found = false;
+        for (uint8_t j = 0; j < frequency_count; ++j) {
+            if (frequencies[j] == other.frequencies[i]) {
+                found = true;
+                break;
+            }
+        }
+        if (found) continue;
+
+        // check list length
+        if (frequency_count >= MAX_NOTES_PER_NODE) return;
+
+        // add frequency to the array
+        frequencies[frequency_count++] = other.frequencies[i];
+    }
+}
+
 void Sequencer::callback() {
     // exit if we're paused
     if (!_run) return;
