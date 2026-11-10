@@ -18,11 +18,6 @@ struct PoolNode {
     PoolNode(const PoolNode& node) = delete;
     PoolNode(PoolNode&& node) = delete;
 
-    // conversion operators
-    // TODO(?) this will shit itself at runtime if T is not copy constructable
-    operator T() const { return data; }
-    operator T&() { return data; }
-
     PoolNode* next = nullptr;
     T data;
 };
