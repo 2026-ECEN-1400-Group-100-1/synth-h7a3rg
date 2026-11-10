@@ -80,7 +80,7 @@ private:
     uint16_t _max_beats = 0;
 
     bool _run = false;
-    uint16_t _tempo = 60; // TODO set this
+    uint16_t _tempo = 28; // TODO set this
 };
 
 } // namespace sequencer
