@@ -34,10 +34,10 @@ private:
 
 class SynthGetFrequenciesEvent final : public utils::Event<SynthGetFrequenciesEvent> {
 public:
-    SynthGetFrequenciesEvent() : Event(*this), frequencies() {}
+    SynthGetFrequenciesEvent() : Event(*this), frequencies(), frequency_count(0) {}
 
     uint16_t frequencies[MAX_FREQUENCIES];
-    uint8_t frequency_count = 0;
+    uint8_t frequency_count;
 
     void add_frequency(uint16_t freq);
 };
