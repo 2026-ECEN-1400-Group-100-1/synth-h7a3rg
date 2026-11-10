@@ -41,9 +41,6 @@ public:
         : _matrix(matrix), _matrix_buf(matrix_buf), _rows(rows), _cols(cols)
         { init_pins(); }
 
-    [[nodiscard]]
-    bool get_state(uint8_t x, uint8_t y) const;
-
 protected:
     void update(uint32_t cycles) override;
 
@@ -58,10 +55,10 @@ private:
     /// @brief Sets all the pins to the correct initial value
     void init_pins() const;
 
-    /// @brief Get a reference to the matrix buffer value at (x,y)
+    /// @brief Get a reference to the matrix buffer value at (r,c)
     /// @note No bounds check, use get_state for checked
     [[nodiscard]]
-    MatrixButton& buf_at(uint8_t x, uint8_t y) const { return _matrix_buf[x * _cols + y]; }
+    MatrixButton& buf_at(uint8_t r, uint8_t c) const { return _matrix_buf[r * _cols + c]; }
 
     const Matrix& _matrix;
 
