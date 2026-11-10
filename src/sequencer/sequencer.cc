@@ -39,6 +39,7 @@ void Sequencer::add_trackset() {
         utils::PoolNode<SequenceNode>* new_node = _pool_man.alloc_one();
 
         // zero out all the data on the new node
+        new_node->next = nullptr;
         new_node->data.prev = nullptr;
         for (uint8_t j = 0; j < MAX_NOTES_PER_NODE; ++j)
             new_node->data.frequencies[j] = 0;
