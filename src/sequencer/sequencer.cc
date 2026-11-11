@@ -178,19 +178,19 @@ void Sequencer::handle_event(input::KeysChangedEvent& event) {
 void Sequencer::handle_event(input::MatrixButtonPressedEvent& event) {
     // giant fucking case switch :(
     switch (event.button_pressed.button_type) {
-        case input::Start:
+        case input::StartLoop:
             return on_start();
-        case input::Stop:
+        case input::StopLoop:
             return on_stop();
-        case input::Save:
+        case input::SaveLoop:
             return on_save();
-        case input::First:
+        case input::FirstChord:
             return on_first();
-        case input::Next:
+        case input::NextChord:
             return on_next();
-        case input::Prev:
+        case input::PrevChord:
             return on_prev();
-        case input::Last:
+        case input::LastChord:
             return on_last();
         case input::SelectLoop:
             return on_select_loop(event.button_pressed.loop_number);

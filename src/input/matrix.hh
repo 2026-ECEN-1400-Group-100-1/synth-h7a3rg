@@ -10,15 +10,15 @@ namespace input {
 enum MatrixButtonType {
     None = 0,
 
-    Start,
-    Stop,
+    StartLoop,
+    StopLoop,
 
-    Save,
+    SaveLoop,
 
-    First,
-    Next,
-    Prev,
-    Last,
+    FirstChord,
+    NextChord,
+    PrevChord,
+    LastChord,
 
     SelectLoop,
 
