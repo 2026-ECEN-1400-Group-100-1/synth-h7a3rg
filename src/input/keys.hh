@@ -4,9 +4,16 @@
 #include "octave.hh"
 #include "defs/keys.hh"
 
+#include "utils/event.hh"
+
+// forward declare because of some stupid bullshit probably
+namespace synth {
+class SynthGetFrequenciesEvent;
+} // namespace synth
+
 namespace input {
 
-class KeyHandler final : public InputHandler {
+class KeyHandler final : public InputHandler, public utils::EventSubscriber<synth::SynthGetFrequenciesEvent> {
 public:
     explicit KeyHandler(const OctaveHandler& octave_ctrl)
         : _key_states(), _octave_ctrl(octave_ctrl) {}
@@ -22,10 +29,19 @@ public:
 protected:
     void update(uint32_t cycles) override;
 
+    void handle_event(synth::SynthGetFrequenciesEvent& event) override;
+
 private:
     bool _key_states[NUM_KEYS];
 
     const OctaveHandler& _octave_ctrl;
+};
+
+class KeysChangedEvent final : public utils::Event<KeysChangedEvent> {
+public:
+    explicit KeysChangedEvent(const KeyHandler& event_caller) : Event(*this), key_handler(event_caller) {}
+
+    const KeyHandler& key_handler;
 };
 
 } // namespace input

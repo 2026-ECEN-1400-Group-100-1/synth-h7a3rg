@@ -1,11 +1,32 @@
 #include "keys.hh"
 
+#include "synth/interrupt.hh"
+
 namespace input {
 
 void KeyHandler::update(uint32_t cycles) {
+    bool changed = false;
     for (uint8_t i = 0; i < NUM_KEYS; ++i) {
         // inverted logic due to pullup resistors
+        bool key_state = !KEYS[i].read();
+        if (key_state == _key_states[i])
+            continue;
+
+        changed = true;
         _key_states[i] = !KEYS[i].read();
+    }
+    if (!changed) return;
+
+    KeysChangedEvent event(*this);
+    event.raise();
+}
+
+void KeyHandler::handle_event(synth::SynthGetFrequenciesEvent& event) {
+    // add current keys
+    for (uint8_t i = 0; i < NUM_KEYS; ++i) {
+        uint16_t freq = key_freq(i);
+        if (freq != 0)
+            event.add_frequency(freq);
     }
 }
 

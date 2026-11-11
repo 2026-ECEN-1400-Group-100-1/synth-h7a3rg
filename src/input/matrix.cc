@@ -6,35 +6,45 @@ void MatrixHandler::update(uint32_t cycles) {
     if (!should_update(cycles))
         return;
 
-    for (uint8_t x = 0; x < _rows; ++x) {
+    for (uint8_t r = 0; r < _rows; ++r) {
         // set LOW (pullup)
-        _matrix.Rows[x].write(GPIO_PIN_RESET);
+        _matrix.Rows[r].write(GPIO_PIN_RESET);
 
-        for (uint8_t y = 0; y < _cols; ++y) {
-            // invert due to pullup
-            buf_at(x,y) = !_matrix.Cols[y].read();
+        for (uint8_t c = 0; c < _cols; ++c) {
+            update_button(r, c);
         }
 
         // set back HIGH
-        _matrix.Rows[x].write(GPIO_PIN_SET);
+        _matrix.Rows[r].write(GPIO_PIN_SET);
     }
-}
-
-bool MatrixHandler::get_state(uint8_t x, uint8_t y) const {
-    // exit if out of bounds
-    if (x >= _rows || y >= _cols)
-        return false;
-
-    return buf_at(x, y);
 }
 
 bool MatrixHandler::should_update(uint32_t cycles) const {
     return _last_update + _update_threshold < cycles;
 }
 
+void MatrixHandler::update_button(uint8_t r, uint8_t c) const {
+    bool pin_state = !_matrix.Cols[c].read(); // inverted due to pullup
+    MatrixButton& button = buf_at(r, c);
+
+    // return if the state is the same as last time
+    if (pin_state == button.state)
+        return;
+
+    button.state = pin_state;
+
+    // return if the pin just got toggled off
+    if (!pin_state)
+        return;
+
+    // raise an update event on this button
+    MatrixButtonPressedEvent event(*this, button);
+    event.raise();
+}
+
 void MatrixHandler::init_pins() const {
-    for (uint8_t x = 0; x < _rows; ++x) {
-        _matrix.Rows[x].write(GPIO_PIN_SET);
+    for (uint8_t r = 0; r < _rows; ++r) {
+        _matrix.Rows[r].write(GPIO_PIN_SET);
     }
 }
 

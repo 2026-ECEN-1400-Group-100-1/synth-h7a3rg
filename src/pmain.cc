@@ -11,15 +11,24 @@
 #include "input/keys.hh"
 #include "input/matrix.hh"
 #include "input/octave.hh"
+#include "sequencer/sequencer.hh"
 #include "synth/interrupt.hh"
+
+#include "defs/matrix.hh"
 
 static input::InputTimer input_tim(&htim2);
 static input::OctaveHandler octave_handle;
 static input::KeyHandler key_handle(octave_handle);
 
-static bool MATRIX_BUF[MATRIX_ROWS*MATRIX_COLS];
 static input::MatrixHandler matrix_handle(
     MATRIX_KEYS, MATRIX_BUF, MATRIX_ROWS, MATRIX_COLS);
+
+#define SEQUENCE_NODE_COUNT 2048
+
+// __attribute__(( section(".ram") )) // Put them in RAM (1MB capacity) instead of DTCMRAM (default, 128KB capacity)
+static utils::PoolNode<sequencer::SequenceNode> sequence_nodes[SEQUENCE_NODE_COUNT];
+static utils::PoolManager seq_pool_man(sequence_nodes, SEQUENCE_NODE_COUNT);
+static sequencer::Sequencer seq_tim(&htim3, seq_pool_man);
 
 /// DAC interrupt frequency is 28kHz
 #define DAC_INTERRUPT_FREQ 28000
@@ -38,6 +47,8 @@ void pmain() {
     input_tim.register_handler(&key_handle);
     input_tim.register_handler(&matrix_handle);
     input_tim.start();
+
+    seq_tim.start();
 
     synth_tim.start();
 
