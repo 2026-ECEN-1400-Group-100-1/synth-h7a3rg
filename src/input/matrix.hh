@@ -21,6 +21,8 @@ enum MatrixButtonType {
     Last,
 
     SelectLoop,
+
+    Run,
 };
 
 struct MatrixButton {

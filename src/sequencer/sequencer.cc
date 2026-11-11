@@ -99,6 +99,15 @@ void Sequencer::set_last() {
     }
 }
 
+void Sequencer::set_running(bool run) {
+    if (_run == run) return;
+
+    // TODO make the status light not suck
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, run ? GPIO_PIN_SET : GPIO_PIN_RESET);
+    _staged_node.clear();
+    _run = run;
+}
+
 void Sequencer::add_beat_looping() {
     if (_beat++ >= _max_beats) {
         set_first();
@@ -127,6 +136,7 @@ void Sequencer::sub_beat_or_cancel() {
 }
 
 void Sequencer::commit_staged() {
+    // return if we don't have a loop
     if (_curr_loop == 0) return;
 
     // get current node
@@ -184,6 +194,8 @@ void Sequencer::handle_event(input::MatrixButtonPressedEvent& event) {
             return on_last();
         case input::SelectLoop:
             return on_select_loop(event.button_pressed.loop_number);
+        case input::Run:
+            return on_run();
         default: return; // so clang-tidy will shut up
     }
 }
@@ -192,22 +204,29 @@ void Sequencer::handle_event(synth::SynthGetFrequenciesEvent& event) {
     // add from staged node
     if (_curr_loop != 0)
         _staged_node.add_to_synth_event(event);
+
+    // add all running nodes
+    for (uint8_t i = 0; i < NUM_TRACKS; ++i) {
+        if (!_tracks[i].running) continue;
+        _tracks[i].curr->data.add_to_synth_event(event);
+    }
 }
 
 void Sequencer::on_start() {
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
-    if (_run) return; // already running
-    _run = true;
-    _curr_loop = 0;
     _staged_node.clear();
+    if (_curr_loop == 0) return;
+    _tracks[_curr_loop].running = true;
+
+    set_running(true);
+    _curr_loop = 0;
 }
 
 void Sequencer::on_stop() {
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);
-    if (!_run) return; // already stopped
-    _run = false;
-    _curr_loop = 0;
     _staged_node.clear();
+    if (_curr_loop == 0) return;
+
+    _tracks[_curr_loop].running = false;
+    _curr_loop = 0;
 }
 
 void Sequencer::on_save() {
@@ -240,6 +259,14 @@ void Sequencer::on_select_loop(uint8_t loop_num) {
     // set to pressed button unless that button is already selected
     _curr_loop = _curr_loop == loop_num ? 0 : loop_num;
     _staged_node.clear();
+    set_running(false);
+
+    if (_curr_loop != 0)
+        _tracks[_curr_loop-1].running = true;
+}
+
+void Sequencer::on_run() {
+    set_running(!_run);
 }
 
 } // namespace sequencer

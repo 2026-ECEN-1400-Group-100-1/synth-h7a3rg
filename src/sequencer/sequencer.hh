@@ -63,6 +63,8 @@ private:
     void set_first();
     void set_last();
 
+    void set_running(bool run);
+
     /// @brief Try to add a beat, and loop back to beat 0 if it hits the cap
     void add_beat_looping();
     /// @brief Add a beat, and add to _max_beats if it hits the cap
@@ -82,6 +84,8 @@ private:
     void on_next();
     void on_prev();
     void on_last();
+
+    void on_run();
 
     void on_select_loop(uint8_t loop_num);
 
