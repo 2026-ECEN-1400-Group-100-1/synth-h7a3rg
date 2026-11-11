@@ -23,9 +23,9 @@ static input::KeyHandler key_handle(octave_handle);
 static input::MatrixHandler matrix_handle(
     MATRIX_KEYS, MATRIX_BUF, MATRIX_ROWS, MATRIX_COLS);
 
-#define SEQUENCE_NODE_COUNT 16384
+#define SEQUENCE_NODE_COUNT 2048
 
-__attribute__(( section(".ram") )) // Put them in RAM (1MB capacity) instead of DTCMRAM (default, 128KB capacity)
+// __attribute__(( section(".ram") )) // Put them in RAM (1MB capacity) instead of DTCMRAM (default, 128KB capacity)
 static utils::PoolNode<sequencer::SequenceNode> sequence_nodes[SEQUENCE_NODE_COUNT];
 static utils::PoolManager seq_pool_man(sequence_nodes, SEQUENCE_NODE_COUNT);
 static sequencer::Sequencer seq_tim(&htim3, seq_pool_man);
