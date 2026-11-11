@@ -110,6 +110,7 @@ private:
 
     bool _run = false;
     uint16_t _tempo = 28; // TODO set this
+    uint8_t _time_signature = 4;
 };
 
 } // namespace sequencer

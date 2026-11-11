@@ -33,7 +33,7 @@ void Sequencer::callback() {
     if (!_run) return;
 
     // check if we should move to the next beat
-    if (_tick++ < _tempo)
+    if (_tick++ < _tempo * _time_signature)
         return;
 
     // move to next beat with looping
