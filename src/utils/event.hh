@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 #define MAX_EVENT_SUBSCRIBERS 16
 
 namespace utils {
