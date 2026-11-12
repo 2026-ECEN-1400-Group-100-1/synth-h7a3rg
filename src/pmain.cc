@@ -35,7 +35,7 @@ static sequencer::Sequencer seq_tim(&htim3, seq_pool_man);
 
 static hardware::DAC dac2(&hdac2, DAC_CHANNEL_1, DAC_ALIGN_12B_R);
 
-static synth::SynthTimer synth_tim(&htim1, dac2, DAC_INTERRUPT_FREQ, key_handle);
+static synth::SynthTimer synth_tim(&htim1, dac2, DAC_INTERRUPT_FREQ);
 
 void pmain() {
     // generate sin table

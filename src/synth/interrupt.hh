@@ -2,7 +2,6 @@
 
 #include "hardware/dac.hh"
 #include "hardware/timer.hh"
-#include "input/keys.hh"
 
 #include "utils/event.hh"
 
@@ -14,11 +13,10 @@ class SynthTimer final : public hardware::Timer {
 public:
     SynthTimer(TIM_HandleTypeDef* timer,
         hardware::DAC& dac,
-        uint32_t interrupt_frequency,
-        const input::KeyHandler& key_handler)
+        uint32_t interrupt_frequency)
         : Timer(timer),
         _dac(dac),
-        _interrupt_frequency(interrupt_frequency), _key_handler(key_handler) {}
+        _interrupt_frequency(interrupt_frequency) {}
 
 protected:
     void callback() override;
@@ -26,8 +24,6 @@ protected:
 private:
     hardware::DAC& _dac;
     uint32_t _interrupt_frequency;
-
-    const input::KeyHandler& _key_handler;
 
     double _dac_accumulator = 0;
 };
