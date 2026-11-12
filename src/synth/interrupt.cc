@@ -7,12 +7,14 @@
 namespace synth {
 
 void SynthTimer::callback() {
-    _dac_accumulator += 1.0 / _interrupt_frequency;
+    // have _dac_accumulator go from 0-SIN_TABLE_RES once every second
+    _dac_accumulator += static_cast<double>(SIN_TABLE_RES) / _interrupt_frequency;
 
-    // prevent floating point precision loss shenanegans
-    // and prevent uint16_t sin_val from overflowing
-    if (_dac_accumulator > 1)
-        _dac_accumulator -= 1;
+    // rollover
+    if (_dac_accumulator >= SIN_TABLE_RES) {
+        _dac_accumulator -= SIN_TABLE_RES;
+        HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
+    }
 
     SynthGetFrequenciesEvent event;
     event.raise();
@@ -35,7 +37,7 @@ void SynthTimer::callback() {
     }
 
     // chop to fit in 12-bit DAC
-    dac_out /= event.frequency_count * 4096;
+    dac_out /= event.frequency_count * 8192;
 
     _dac.write(dac_out);
 }
