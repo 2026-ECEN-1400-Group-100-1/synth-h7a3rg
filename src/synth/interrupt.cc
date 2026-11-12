@@ -24,8 +24,10 @@ void SynthTimer::callback() {
 
     // get the wave at the current time for all of our frequencies
     for (int i = 0; i < event.frequency_count; ++i) {
+        // NOLINTBEGIN - ignore narrowing conversion warning, we're doing it on purpose
         const uint16_t sin_val =
             static_cast<double>(event.frequencies[i]) * _dac_accumulator;
+        // NOLINTEND
 
         // range of sintab: 0 - 4095
         // domain: 0-4095 (done modulo)
