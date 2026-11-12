@@ -11,6 +11,7 @@ public:
 
     HAL_StatusTypeDef start() const {
         // TODO calibrate?
+        // HAL_ADCEx_Calibration_Start(_handle, ADC_SINGLE_ENDED);
         return HAL_ADC_Start(_handle);
     }
 
