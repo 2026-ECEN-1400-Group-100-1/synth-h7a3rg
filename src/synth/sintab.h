@@ -16,6 +16,8 @@ extern uint16_t SIN_TABLE[SIN_TABLE_RES];
 void generate_sintab(void);
 
 /// @brief Looks up a value in the sin lookup table
+/// @param val The value to look up. Can be any uint16_t
+/// @returns sin(2pi*val), shifted to a range of 0 through SIN_MAX
 inline uint16_t sintab(uint16_t val) {
     return SIN_TABLE[val % SIN_TABLE_RES];
 }

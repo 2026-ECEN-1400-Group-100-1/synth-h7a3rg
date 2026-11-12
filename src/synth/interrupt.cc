@@ -10,6 +10,7 @@ void SynthTimer::callback() {
     _dac_accumulator += 1.0 / _interrupt_frequency;
 
     // prevent floating point precision loss shenanegans
+    // and prevent uint16_t sin_val from overflowing
     if (_dac_accumulator > 1)
         _dac_accumulator -= 1;
 
