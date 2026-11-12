@@ -5,10 +5,9 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include <math.h>
 
 #define SIN_TABLE_RES 4096
-#define SIN_MAX 65535
+#define SIN_MAX 4095
 
 extern uint16_t SIN_TABLE[SIN_TABLE_RES];
 
