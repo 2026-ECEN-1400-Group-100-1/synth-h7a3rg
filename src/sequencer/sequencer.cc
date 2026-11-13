@@ -63,7 +63,7 @@ void Sequencer::add_trackset() {
     for (uint8_t i = 0; i < NUM_TRACKS; ++i) {
         utils::PoolNode<SequenceNode>*& tail = _tracks[i].tail;
         utils::PoolNode<SequenceNode>* new_node = _pool_man.alloc_one();
-        if (new_node == nullptr) return; // won't practically happen (>16k nodes in pool)
+        if (new_node == nullptr) return; // won't practically happen (>2k nodes in pool)
 
         // zero out all the data on the new node
         new_node->next = nullptr;
