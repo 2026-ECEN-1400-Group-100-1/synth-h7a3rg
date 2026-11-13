@@ -55,6 +55,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
         src/input/octave.cc
         src/input/keys.cc
         src/input/matrix.cc
+        src/input/potentiometer.cc
         src/sequencer/sequencer.cc
 )
 

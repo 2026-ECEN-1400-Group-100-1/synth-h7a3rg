@@ -6,6 +6,7 @@
 #include "synth/sintab.h"
 
 #include "hardware/dac.hh"
+#include "hardware/adc.hh"
 
 #include "input/interrupt.hh"
 #include "input/keys.hh"
@@ -15,6 +16,8 @@
 #include "synth/interrupt.hh"
 
 #include "defs/matrix.hh"
+
+static hardware::ADC adc1(&hadc1);
 
 static input::InputTimer input_tim(&htim2);
 static input::OctaveHandler octave_handle;
@@ -41,6 +44,7 @@ void pmain() {
     // generate sin table
     generate_sintab();
 
+    adc1.start();
     dac2.start();
 
     input_tim.register_handler(&octave_handle);
