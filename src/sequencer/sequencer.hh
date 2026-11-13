@@ -64,7 +64,7 @@ private:
     void set_last();
 
     void set_running(bool run);
-    void set_track(uint8_t track);
+    void set_loop(uint8_t track);
 
     /// @brief Try to add a beat, and loop back to beat 0 if it hits the cap
     void add_beat_looping();

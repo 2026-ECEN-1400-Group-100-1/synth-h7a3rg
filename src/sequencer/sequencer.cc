@@ -110,7 +110,7 @@ void Sequencer::set_running(bool run) {
     _run = run;
 }
 
-void Sequencer::set_track(uint8_t track) {
+void Sequencer::set_loop(uint8_t track) {
     if (_curr_loop != 0) {
         LOOP_LED_PINS[track-1].write(false);
     }
@@ -230,7 +230,7 @@ void Sequencer::on_start() {
     _tracks[_curr_loop].running = true;
 
     set_running(true);
-    _curr_loop = 0;
+    set_loop(0);
 }
 
 void Sequencer::on_stop() {
@@ -238,7 +238,7 @@ void Sequencer::on_stop() {
     if (_curr_loop == 0) return;
 
     _tracks[_curr_loop].running = false;
-    _curr_loop = 0;
+    set_loop(0);
 }
 
 void Sequencer::on_save() {
@@ -269,7 +269,7 @@ void Sequencer::on_prev() {
 
 void Sequencer::on_select_loop(uint8_t loop_num) {
     // set to pressed button unless that button is already selected
-    _curr_loop = _curr_loop == loop_num ? 0 : loop_num;
+    set_loop(_curr_loop == loop_num ? 0 : loop_num);
     _staged_node.clear();
     set_running(false);
 
