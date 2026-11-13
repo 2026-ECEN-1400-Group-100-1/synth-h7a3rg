@@ -22,12 +22,12 @@ void SynthTimer::callback() {
     if (event.frequency_count == 0)
         return;
 
-    uint16_t dac_out = 0;
+    uint32_t dac_out = 0;
 
     // get the wave at the current time for all of our frequencies
     for (int i = 0; i < event.frequency_count; ++i) {
         // NOLINTBEGIN - ignore narrowing conversion warning, we're doing it on purpose
-        const uint16_t sin_val =
+        const uint32_t sin_val =
             static_cast<double>(event.frequencies[i]) * _dac_accumulator;
         // NOLINTEND
 
