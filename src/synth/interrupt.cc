@@ -2,13 +2,17 @@
 
 #include "main.h"
 
+#include "sintab.h"
+
 namespace synth {
 
 void SynthTimer::callback() {
-    _dac_accumulator += 1.0 / _interrupt_frequency;
+    // have _dac_accumulator go from 0-SIN_TABLE_RES once every second
+    _dac_accumulator += static_cast<double>(SIN_TABLE_RES) / _interrupt_frequency;
 
-    if (_dac_accumulator > 1)
-        _dac_accumulator -= 1;
+    // rollover
+    if (_dac_accumulator >= SIN_TABLE_RES)
+        _dac_accumulator -= SIN_TABLE_RES;
 
     SynthGetFrequenciesEvent event;
     event.raise();
@@ -16,16 +20,24 @@ void SynthTimer::callback() {
     if (event.frequency_count == 0)
         return;
 
-    double dac_out = 0;
+    uint32_t dac_out = 0;
 
+    // get the wave at the current time for all of our frequencies
     for (int i = 0; i < event.frequency_count; ++i) {
-        dac_out += sin(2 * M_PI * event.frequencies[i] * _dac_accumulator) + 1;
+        // NOLINTBEGIN - ignore narrowing conversion warning, we're doing it on purpose
+        const uint32_t sin_val =
+            static_cast<double>(event.frequencies[i]) * _dac_accumulator;
+        // NOLINTEND
+
+        // range of sintab: 0 - 4095
+        // domain: 0-4095 (done modulo)
+        dac_out += sintab(sin_val);
     }
 
-    dac_out *= 2048;
-    dac_out /= static_cast<double>(event.frequency_count);
+    // chop to fit in 12-bit DAC
+    dac_out /= event.frequency_count;
 
-    _dac.write(static_cast<uint16_t>(dac_out));
+    _dac.write(dac_out);
 }
 
 bool SynthGetFrequenciesEvent::add_frequency(uint16_t freq) {
