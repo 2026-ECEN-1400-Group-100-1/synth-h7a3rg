@@ -1,5 +1,7 @@
 #include "sequencer.hh"
 
+#include "defs/lights.hh"
+
 namespace sequencer {
 
 void SequenceNode::append_data(const SequenceNode& other) {
@@ -106,6 +108,16 @@ void Sequencer::set_running(bool run) {
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, run ? GPIO_PIN_SET : GPIO_PIN_RESET);
     _staged_node.clear();
     _run = run;
+}
+
+void Sequencer::set_track(uint8_t track) {
+    if (_curr_loop != 0) {
+        LOOP_LED_PINS[track-1].write(false);
+    }
+
+    _curr_loop = track;
+    if (_curr_loop == 0) return;
+    LOOP_LED_PINS[track-1].write(true);
 }
 
 void Sequencer::add_beat_looping() {
