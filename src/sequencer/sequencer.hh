@@ -13,6 +13,8 @@
 #define NUM_TRACKS 5
 #define MAX_NOTES_PER_NODE 12
 
+#define BLINK_TICKS 2
+
 namespace sequencer {
 
 // Linked list node, uses next pointer from PoolNode
@@ -52,6 +54,8 @@ protected:
     void handle_event(synth::SynthGetFrequenciesEvent& event) override;
 
 private:
+    void update_tempo_light();
+
     /// @brief Move the curr* for every track up by one
     void increment_tracks();
     /// @brief Move the curr* for every track down by one
@@ -64,6 +68,7 @@ private:
     void set_last();
 
     void set_running(bool run);
+    void set_loop(uint8_t track);
 
     /// @brief Try to add a beat, and loop back to beat 0 if it hits the cap
     void add_beat_looping();
@@ -111,6 +116,8 @@ private:
     bool _run = false;
     uint16_t _tempo = 28; // TODO set this
     uint8_t _time_signature = 4;
+
+    uint8_t _blink_timer = 0;
 };
 
 } // namespace sequencer
