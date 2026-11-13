@@ -9,3 +9,5 @@ const hardware::Pin LOOP_LED_PINS[] = {
     {GPIOC, GPIO_PIN_15},
     {GPIOC, GPIO_PIN_14}, // NOTE: loop 5 is on the GPIO2 out
 };
+
+const hardware::Pin TEMPO_PIN = {GPIOC, GPIO_PIN_13};

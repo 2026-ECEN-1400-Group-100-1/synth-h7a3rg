@@ -31,6 +31,8 @@ void SequenceNode::add_to_synth_event(synth::SynthGetFrequenciesEvent& event) co
 }
 
 void Sequencer::callback() {
+    update_tempo_light();
+
     // exit if we're paused
     if (!_run) return;
 
@@ -41,6 +43,24 @@ void Sequencer::callback() {
     // move to next beat with looping
     add_beat_looping();
     _tick = 0;
+}
+
+void Sequencer::update_tempo_light() {
+    if (!_run) {
+        TEMPO_PIN.write(false);
+        return;
+    }
+
+    if (_tick % _tempo == 0) {
+        // flash if we just incremented the beat
+        TEMPO_PIN.write(true);
+        _blink_timer = 0;
+        return;
+    }
+
+    ++_blink_timer;
+    if (_blink_timer <= BLINK_TICKS) return;
+    TEMPO_PIN.write(false); // stop flashing
 }
 
 void Sequencer::increment_tracks() {
