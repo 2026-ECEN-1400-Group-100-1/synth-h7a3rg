@@ -11,10 +11,8 @@ void SynthTimer::callback() {
     _dac_accumulator += static_cast<double>(SIN_TABLE_RES) / _interrupt_frequency;
 
     // rollover
-    if (_dac_accumulator >= SIN_TABLE_RES) {
+    if (_dac_accumulator >= SIN_TABLE_RES)
         _dac_accumulator -= SIN_TABLE_RES;
-        HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
-    }
 
     SynthGetFrequenciesEvent event;
     event.raise();
@@ -37,7 +35,7 @@ void SynthTimer::callback() {
     }
 
     // chop to fit in 12-bit DAC
-    dac_out /= event.frequency_count * 8192;
+    dac_out /= event.frequency_count;
 
     _dac.write(dac_out);
 }
