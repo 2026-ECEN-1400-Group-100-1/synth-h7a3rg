@@ -9,14 +9,14 @@ public:
     explicit ADC(ADC_HandleTypeDef* adc)
         : _handle(adc) {}
 
-    HAL_StatusTypeDef start() const {
+    void start() const {
         // TODO calibrate?
         // HAL_ADCEx_Calibration_Start(_handle, ADC_SINGLE_ENDED);
-        return HAL_ADC_Start(_handle);
+        HAL_ADC_Start(_handle);
     }
 
-    HAL_StatusTypeDef stop() const {
-        return HAL_ADC_Stop(_handle);
+    void stop() const {
+        HAL_ADC_Stop(_handle);
     }
 
     HAL_StatusTypeDef set_channel(ADC_ChannelConfTypeDef* channel) const {
