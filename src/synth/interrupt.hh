@@ -6,7 +6,7 @@
 
 #include "utils/event.hh"
 
-#define MAX_FREQUENCIES 6
+#define MAX_FREQUENCIES 12
 
 namespace synth {
 
