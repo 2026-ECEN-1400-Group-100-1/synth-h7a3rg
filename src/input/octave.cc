@@ -1,5 +1,7 @@
 #include "octave.hh"
 
+#include "matrix.hh"
+
 namespace input {
 
 void OctaveHandler::update(uint32_t cycles) {
@@ -24,6 +26,20 @@ void OctaveHandler::update(uint32_t cycles) {
 
     // prevent octave overruns
     _curr_octave %= NUM_OCTAVES;
+}
+
+void OctaveHandler::handle_event(MatrixButtonPressedEvent& event) {
+    // let matrix handle the debounce
+    switch (event.button_pressed.button_type) {
+    case OctaveUp: {
+        ++_curr_octave;
+        break;
+    } case OctaveDown: {
+        --_curr_octave;
+        break;
+    }
+    default: return;
+    }
 }
 
 bool OctaveHandler::should_update(uint32_t cycles) const {

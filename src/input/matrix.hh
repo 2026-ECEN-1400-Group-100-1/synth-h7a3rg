@@ -23,6 +23,9 @@ enum MatrixButtonType {
     SelectLoop,
 
     Run,
+
+    OctaveUp,
+    OctaveDown,
 };
 
 struct MatrixButton {

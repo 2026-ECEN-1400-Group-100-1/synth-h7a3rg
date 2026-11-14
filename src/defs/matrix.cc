@@ -9,8 +9,8 @@ input::MatrixButton MATRIX_BUF[] = {
     input::MatrixButton(input::SelectLoop, 5), // 0, 4
 
     input::MatrixButton(input::StartLoop), // 1, 0
-    input::MatrixButton(input::None), // 1, 1
-    input::MatrixButton(input::StopLoop), // 1, 2
+    input::MatrixButton(input::OctaveUp), // 1, 1
+    input::MatrixButton(input::OctaveDown), // 1, 2
     input::MatrixButton(input::None), // 1, 3 (empty on board)
     input::MatrixButton(input::Run), // 1, 4
 
