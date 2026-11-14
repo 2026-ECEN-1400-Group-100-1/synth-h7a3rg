@@ -109,7 +109,7 @@ private:
     uint16_t _max_beats = 0;
 
     bool _run = false;
-    uint16_t _tempo = 28; // TODO set this
+    uint16_t _tempo = 14; // TODO set this
     uint8_t _time_signature = 4;
 };
 
