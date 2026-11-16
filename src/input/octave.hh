@@ -3,10 +3,13 @@
 #include "defs/keys.hh"
 #include "hardware/pin.hh"
 #include "handler.hh"
+#include "utils/event.hh"
 
 namespace input {
+class MatrixButtonPressedEvent;
 
-class OctaveHandler final : public InputHandler {
+class OctaveHandler final : public InputHandler,
+    public utils::EventSubscriber<MatrixButtonPressedEvent> {
 public:
     OctaveHandler() = default;
 
@@ -15,6 +18,8 @@ public:
 
 protected:
     void update(uint32_t cycles) override;
+
+    void handle_event(MatrixButtonPressedEvent& event) override;
 
 private:
     [[nodiscard]]
