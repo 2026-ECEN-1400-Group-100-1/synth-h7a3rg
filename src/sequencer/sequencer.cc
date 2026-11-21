@@ -1,5 +1,7 @@
 #include "sequencer.hh"
 
+#include "defs/lights.hh"
+
 namespace sequencer {
 
 void SequenceNode::append_data(const SequenceNode& other) {
@@ -29,6 +31,8 @@ void SequenceNode::add_to_synth_event(synth::SynthGetFrequenciesEvent& event) co
 }
 
 void Sequencer::callback() {
+    update_tempo_light();
+
     // exit if we're paused
     if (!_run) return;
 
@@ -39,6 +43,24 @@ void Sequencer::callback() {
     // move to next beat with looping
     add_beat_looping();
     _tick = 0;
+}
+
+void Sequencer::update_tempo_light() {
+    if (!_run) {
+        TEMPO_PIN.write(false);
+        return;
+    }
+
+    if (_tick % _tempo == 0) {
+        // flash if we just incremented the beat
+        TEMPO_PIN.write(true);
+        _blink_timer = 0;
+        return;
+    }
+
+    ++_blink_timer;
+    if (_blink_timer <= BLINK_TICKS) return;
+    TEMPO_PIN.write(false); // stop flashing
 }
 
 void Sequencer::increment_tracks() {
@@ -106,6 +128,16 @@ void Sequencer::set_running(bool run) {
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, run ? GPIO_PIN_SET : GPIO_PIN_RESET);
     _staged_node.clear();
     _run = run;
+}
+
+void Sequencer::set_loop(uint8_t track) {
+    if (_curr_loop != 0) {
+        LOOP_LED_PINS[track-1].write(false);
+    }
+
+    _curr_loop = track;
+    if (_curr_loop == 0) return;
+    LOOP_LED_PINS[track-1].write(true);
 }
 
 void Sequencer::add_beat_looping() {
@@ -218,7 +250,7 @@ void Sequencer::on_start() {
     _tracks[_curr_loop].running = true;
 
     set_running(true);
-    _curr_loop = 0;
+    set_loop(0);
 }
 
 void Sequencer::on_stop() {
@@ -226,7 +258,7 @@ void Sequencer::on_stop() {
     if (_curr_loop == 0) return;
 
     _tracks[_curr_loop].running = false;
-    _curr_loop = 0;
+    set_loop(0);
 }
 
 void Sequencer::on_save() {
@@ -257,7 +289,7 @@ void Sequencer::on_prev() {
 
 void Sequencer::on_select_loop(uint8_t loop_num) {
     // set to pressed button unless that button is already selected
-    _curr_loop = _curr_loop == loop_num ? 0 : loop_num;
+    set_loop(_curr_loop == loop_num ? 0 : loop_num);
     _staged_node.clear();
     set_running(false);
 
